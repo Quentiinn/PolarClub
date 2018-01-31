@@ -1,14 +1,22 @@
 package com.example.quentincourvoisier.polarclub.fragments;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
+import com.example.common.Constants;
 import com.example.quentincourvoisier.polarclub.R;
+import com.example.quentincourvoisier.polarclub.services.WearHearbeatEmulatorService;
+import com.example.quentincourvoisier.polarclub.utils.HeartBeatView;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -18,7 +26,7 @@ import com.example.quentincourvoisier.polarclub.R;
  * Use the {@link HeartRateFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HeartRateFragment extends Fragment {
+public class HeartRateFragment extends Fragment{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -27,6 +35,13 @@ public class HeartRateFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private TextView tv;
+    private Intent heartBeatIntent;
+    private BroadcastReceiver br;
+
+    private TextView mTextView;
+    private HeartBeatView heartbeat;
 
     private OnFragmentInteractionListener mListener;
 
@@ -64,8 +79,23 @@ public class HeartRateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_heart_rate, container, false);
+        heartBeatIntent = new Intent(getActivity() , WearHearbeatEmulatorService.class);
+        View rootView = inflater.inflate(R.layout.fragment_heart_rate, container, false);
+        mTextView = (TextView) rootView.findViewById(R.id.tvheartrate);
+        heartbeat = (HeartBeatView) rootView.findViewById(R.id.heartbeat);
+
+
+        br = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                int hearbeats = intent.getExtras().getInt(Constants.HEART_COUNT_VALUE);
+                Log.i("azeaz" , String.valueOf(hearbeats));
+                mTextView.setText(String.valueOf(hearbeats));
+                //SynchronizeAsyncTask mSynchronizeAsyncTask = new SynchronizeAsyncTask(getActivity());
+                //mSynchronizeAsyncTask.execute(new Integer(hearbeats));
+            }
+        };
+        return rootView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -73,6 +103,22 @@ public class HeartRateFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        getActivity().startService(heartBeatIntent);
+        getContext().registerReceiver(br , new IntentFilter(Constants.HEART_COUNT_MESSAGE));
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        getActivity().stopService(heartBeatIntent);
+        getActivity().unregisterReceiver(br);
     }
 
     @Override

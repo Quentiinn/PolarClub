@@ -1,13 +1,35 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<android.support.wear.widget.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:tools="http://schemas.android.com/tools"
+android:id="@+id/container"
+android:layout_width="match_parent"
+android:layout_height="match_parent"
+tools:context="com.example.quentincourvoisier.polarclub.fragments.HeartRateFragment"
+
+tools:deviceIds="wear">
+
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.quentincourvoisier.polarclub.fragments.HeartRateFragment">
+    android:layout_gravity="center"
+    android:orientation="horizontal">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.example.quentincourvoisier.polarclub.utils.HeartBeatView
+        android:id="@+id/heartbeat"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_marginLeft="25dp"
+        android:layout_weight="1" />
+    <TextView
+        android:id="@+id/tvheartrate"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:gravity="left|center"
+        android:hint="Reading"
+        android:textColorHint="#eaeaea"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-</FrameLayout>
+</LinearLayout>
+</android.support.wear.widget.BoxInsetLayout>
