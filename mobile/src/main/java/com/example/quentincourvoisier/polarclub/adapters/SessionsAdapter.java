@@ -10,6 +10,7 @@ import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.model.Session;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +23,12 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public SessionsAdapter() {
         sessions = new ArrayList<>();
+    }
+
+    public void testListSession() {
+        sessions.add(new Session("11111", 123, 100));
+        sessions.add(new Session("11112", 124, 150));
+        sessions.add(new Session("11112", 125, 160));
     }
 
     @Override

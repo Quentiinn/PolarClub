@@ -4,11 +4,14 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.quentincourvoisier.polarclub.R;
+import com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,6 +24,7 @@ import com.example.quentincourvoisier.polarclub.R;
 public class ListSessionFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
+    private View root;
 
     public ListSessionFragment() {
         // Required empty public constructor
@@ -53,8 +57,15 @@ public class ListSessionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_list_session, container, false);
+        root= inflater.inflate(R.layout.fragment_list_session, container, false);
+        final RecyclerView rv = root.findViewById(R.id.sessions_recycler_view);
+        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
+        SessionsAdapter sa = new SessionsAdapter();
+        sa.testListSession();
+        rv.setAdapter(sa);
+        return root;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
