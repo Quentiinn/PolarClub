@@ -1,6 +1,7 @@
 package com.example.quentincourvoisier.polarclub.activities;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import static com.example.common.Constants.PREF_POLAR;
+import static com.example.common.Constants.PREF_USER;
+
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String BUTTON_SUBMIT = "button_submit";
@@ -26,6 +30,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
+
+    private SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,11 +45,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         buttonSubmit.setTag(BUTTON_SUBMIT);
         buttonSubmit.setOnClickListener(this);
 
+        preferences = getSharedPreferences(PREF_POLAR, MODE_PRIVATE);
+
         auth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null) {
+                if (firebaseAuth.getCurrentUser() != null && preferences.getString(PREF_USER, null) != null) {
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }
@@ -64,7 +72,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void startSignIn() {
-        String email = emailField.getText().toString();
+        final String email = emailField.getText().toString();
         String password = passwordField.getText().toString();
 
         if (verif(email, password)) {
@@ -74,8 +82,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                     if (!task.isSuccessful()) {
                         Toast.makeText(LoginActivity.this, "Sign in problem", Toast.LENGTH_SHORT).show();
                     } else {
-                        String message = "Email = " + task.getResult().getUser().getEmail();
-                        Toast.makeText(LoginActivity.this, message, Toast.LENGTH_SHORT).show();
+                        preferences.edit().putString(PREF_USER, email).apply();
                     }
                 }
             });
