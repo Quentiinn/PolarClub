@@ -7,11 +7,34 @@ tools:context="com.example.quentincourvoisier.polarclub.fragments.HeartRateFragm
 
 tools:deviceIds="wear">
 
-<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
     android:orientation="horizontal">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        >
+
+        <Button
+            android:id="@+id/increaseButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:background="@drawable/ic_add_white_24dp"/>
+
+
+        <Button
+            android:id="@+id/decreaseButton"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignBottom="@id/increaseButton"
+            android:layout_toRightOf="@id/increaseButton"
+            android:background="@drawable/ic_remove_black_24dp"/>
+    </LinearLayout>
+
 
     <com.example.quentincourvoisier.polarclub.utils.HeartBeatView
         android:id="@+id/heartbeat"
@@ -31,5 +54,5 @@ tools:deviceIds="wear">
         android:textSize="20sp"
         android:textStyle="bold" />
 
-</LinearLayout>
+</RelativeLayout>
 </android.support.wear.widget.BoxInsetLayout>

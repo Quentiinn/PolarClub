@@ -11,11 +11,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.common.Constants;
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.services.WearHearbeatEmulatorService;
+import com.example.quentincourvoisier.polarclub.utils.DailyHeartBeat;
 import com.example.quentincourvoisier.polarclub.utils.HeartBeatView;
 
 /**
@@ -26,11 +28,14 @@ import com.example.quentincourvoisier.polarclub.utils.HeartBeatView;
  * Use the {@link HeartRateFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class HeartRateFragment extends Fragment{
+public class HeartRateFragment extends Fragment implements View.OnClickListener {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+
+    private static final String BTN_MORE_HEART = "btn_more_heart";
+    private static final String BTN_LESS_HEART = "btn_less_heart";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -42,6 +47,12 @@ public class HeartRateFragment extends Fragment{
 
     private TextView mTextView;
     private HeartBeatView heartbeat;
+
+    private Button increaseButton;
+    private Button decreaseButton;
+
+
+    private int averageHeartBeat = 80;
 
     private OnFragmentInteractionListener mListener;
 
@@ -83,7 +94,11 @@ public class HeartRateFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_heart_rate, container, false);
         mTextView = (TextView) rootView.findViewById(R.id.tvheartrate);
         heartbeat = (HeartBeatView) rootView.findViewById(R.id.heartbeat);
-
+        increaseButton = (Button) rootView.findViewById(R.id.increaseButton);
+        increaseButton.setOnClickListener(this);
+        decreaseButton = (Button) rootView.findViewById(R.id.decreaseButton);
+        decreaseButton.setOnClickListener(this);
+        setTag();
 
         br = new BroadcastReceiver() {
             @Override
@@ -138,6 +153,18 @@ public class HeartRateFragment extends Fragment{
         mListener = null;
     }
 
+    @Override
+    public void onClick(View v) {
+        switch ((String)v.getTag()){
+            case BTN_MORE_HEART:
+                DailyHeartBeat.setMoreAverage();
+                break;
+            case BTN_LESS_HEART:
+                DailyHeartBeat.setLessAverage();
+                break;
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -151,5 +178,10 @@ public class HeartRateFragment extends Fragment{
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void setTag(){
+        increaseButton.setTag(BTN_MORE_HEART);
+        decreaseButton.setTag(BTN_LESS_HEART);
     }
 }
