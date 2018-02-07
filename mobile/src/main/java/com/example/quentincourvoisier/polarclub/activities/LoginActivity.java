@@ -9,6 +9,7 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quentincourvoisier.polarclub.R;
@@ -23,10 +24,12 @@ import static com.example.common.Constants.PREF_USER;
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
 
     private static final String BUTTON_SUBMIT = "button_submit";
+    private static final String LINK_REGISTER = "link_register";
 
     private EditText emailField;
     private EditText passwordField;
     private Button buttonSubmit;
+    private TextView linkRegister;
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -40,10 +43,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         emailField = findViewById(R.id.loginAct_email);
         passwordField = findViewById(R.id.loginAct_password);
+        linkRegister = findViewById(R.id.loginAct_link);
         buttonSubmit = findViewById(R.id.loginAct_submit);
 
         buttonSubmit.setTag(BUTTON_SUBMIT);
         buttonSubmit.setOnClickListener(this);
+        linkRegister.setTag(LINK_REGISTER);
+        linkRegister.setOnClickListener(this);
 
         preferences = getSharedPreferences(PREF_POLAR, MODE_PRIVATE);
 
@@ -66,8 +72,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        if (v.getTag().equals(BUTTON_SUBMIT)) {
-            startSignIn();
+        switch ((String)v.getTag()) {
+            case BUTTON_SUBMIT:
+                startSignIn();
+                break;
+            case LINK_REGISTER:
+                startActivity(new Intent(this, RegisterActivity.class));
+                finish();
         }
     }
 

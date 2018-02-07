@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     tools:context="com.example.quentincourvoisier.polarclub.activities.LoginActivity">
 
     <LinearLayout
@@ -37,6 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/loginAct_password"
             android:layout_marginTop="10dp"
+            android:padding="10dp"
             android:text="Login"
             style="@style/Widget.AppCompat.Button.Colored"
             />
@@ -45,24 +47,32 @@
 
     <LinearLayout
         android:id="@+id/loginAct_linkRegister"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_above="@id/loginAct_form"
-        android:gravity="center_horizontal">
+        android:layout_below="@id/loginAct_form"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/loginAct_text"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="@string/actLogin_text"
+            android:textSize="18dp"/>
 
         <TextView
             android:id="@+id/loginAct_link"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/loginAct_text"
+            android:layout_alignTop="@id/loginAct_text"
             android:layout_toRightOf="@id/loginAct_text"
-            android:layout_marginLeft="3dp"
+            android:layout_toEndOf="@id/loginAct_text"
             android:textColor="@color/colorPrimaryDark"
+            android:layout_marginLeft="3dp"
+            android:layout_marginStart="3dp"
+            android:text="@string/actLogin_link"
+            android:textSize="18dp"
             tools:ignore="ObsoleteLayoutParam" />
 
     </LinearLayout>

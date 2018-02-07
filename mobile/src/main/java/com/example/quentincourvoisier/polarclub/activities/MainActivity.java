@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         if (user != null) {
             preferences.edit().remove(PREF_USER).apply();
             auth.signOut();
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
             finish();
         }
