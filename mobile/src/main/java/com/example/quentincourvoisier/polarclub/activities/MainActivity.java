@@ -1,4 +1,4 @@
-package com.example.quentincourvoisier.polarclub;
+package com.example.quentincourvoisier.polarclub.activities;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
@@ -7,6 +7,7 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
+import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.fragments.AddSessionFragment;
 import com.example.quentincourvoisier.polarclub.fragments.HomeFragment;
 import com.example.quentincourvoisier.polarclub.fragments.ListSessionFragment;
