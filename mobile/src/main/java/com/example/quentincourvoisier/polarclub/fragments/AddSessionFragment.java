@@ -7,6 +7,7 @@ import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import com.example.quentincourvoisier.polarclub.R;
 
@@ -18,17 +19,11 @@ import com.example.quentincourvoisier.polarclub.R;
  * Use the {@link AddSessionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddSessionFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+public class AddSessionFragment extends Fragment implements View.OnClickListener{
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
+    private static final String BTN_CREATE_SESSION = "btn_crete_session";
     private OnFragmentInteractionListener mListener;
+    private Button buttonCreateSession = null;
 
     public AddSessionFragment() {
         // Required empty public constructor
@@ -46,8 +41,6 @@ public class AddSessionFragment extends Fragment {
     public static AddSessionFragment newInstance(String param1, String param2) {
         AddSessionFragment fragment = new AddSessionFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,8 +49,7 @@ public class AddSessionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
     }
 
@@ -65,6 +57,9 @@ public class AddSessionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+        buttonCreateSession = getActivity().findViewById(R.id.buttonCreateSession);
+        buttonCreateSession.setOnClickListener(this);
+        buttonCreateSession.setTag(BTN_CREATE_SESSION);
         return inflater.inflate(R.layout.fragment_add_session, container, false);
     }
 
@@ -79,6 +74,13 @@ public class AddSessionFragment extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onClick(View view) {
+        if (view.getTag() == BTN_CREATE_SESSION) {
+
+        }
     }
 
     /**
