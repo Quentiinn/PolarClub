@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "224624658756",
+    "firebase_url": "https://polarclub-f99eb.firebaseio.com",
+    "project_id": "polarclub-f99eb",
+    "storage_bucket": "polarclub-f99eb.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:224624658756:android:1cabf481c716f597",
+        "android_client_info": {
+          "package_name": "com.example.quentincourvoisier.polarclub"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "224624658756-dvmpfuh4gnh9c55rrskoc4f92vj9hkef.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC11zyFoMvT7kw9C_V1-N_VpZqgdc2Mdso"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -5,7 +5,9 @@ package com.example.common;
  */
 
 public class Constants {
-    public static final String HEART_COUNT_MESSAGE="com.iutbm.example.iutbm.couchot.healthybody.HEART_COUNT_MESSAGE";
 
-    public static final String HEART_COUNT_VALUE="com.iutbm.example.iutbm.couchot.healthybody.HEART_COUNT_VALUE";
+    public static final String HEART_COUNT_MESSAGE = "com.iutbm.example.iutbm.couchot.healthybody.HEART_COUNT_MESSAGE";
+    public static final String HEART_COUNT_VALUE = "com.iutbm.example.iutbm.couchot.healthybody.HEART_COUNT_VALUE";
+
+    public static final String DB_SESSIONS = "sessions";
 }

@@ -22,9 +22,12 @@ import com.example.quentincourvoisier.polarclub.R;
 public class AddSessionFragment extends Fragment implements View.OnClickListener {
 
     private static final String BTN_CREATE_SESSION = "btn_crete_session";
-    View root = null;
+
+    private View root = null;
     private OnFragmentInteractionListener mListener;
     private Button buttonCreateSession = null;
+
+
 
     public AddSessionFragment() {
         // Required empty public constructor
