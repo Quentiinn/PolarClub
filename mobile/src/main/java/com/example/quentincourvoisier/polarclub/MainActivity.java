@@ -13,7 +13,6 @@ import com.example.quentincourvoisier.polarclub.fragments.ListSessionFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
 

@@ -19,9 +19,10 @@ import com.example.quentincourvoisier.polarclub.R;
  * Use the {@link AddSessionFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class AddSessionFragment extends Fragment implements View.OnClickListener{
+public class AddSessionFragment extends Fragment implements View.OnClickListener {
 
     private static final String BTN_CREATE_SESSION = "btn_crete_session";
+    View root = null;
     private OnFragmentInteractionListener mListener;
     private Button buttonCreateSession = null;
 
@@ -33,8 +34,6 @@ public class AddSessionFragment extends Fragment implements View.OnClickListener
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment AddSessionFragment.
      */
     // TODO: Rename and change types and number of parameters
@@ -56,11 +55,12 @@ public class AddSessionFragment extends Fragment implements View.OnClickListener
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        root = inflater.inflate(R.layout.fragment_add_session, container, false);
         // Inflate the layout for this fragment
-        buttonCreateSession = getActivity().findViewById(R.id.buttonCreateSession);
+        buttonCreateSession = root.findViewById(R.id.buttonCreateSession);
         buttonCreateSession.setOnClickListener(this);
         buttonCreateSession.setTag(BTN_CREATE_SESSION);
-        return inflater.inflate(R.layout.fragment_add_session, container, false);
+        return root;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -96,5 +96,10 @@ public class AddSessionFragment extends Fragment implements View.OnClickListener
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    @Override
+    public void onResume(){
+        super.onResume();
     }
 }
