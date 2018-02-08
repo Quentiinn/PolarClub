@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Email"
+            android:hint="@string/form_mail"
             android:inputType="textEmailAddress" />
 
         <EditText
@@ -29,8 +29,9 @@
             android:layout_below="@id/loginAct_email"
             android:layout_marginTop="10dp"
             android:ems="10"
-            android:hint="Password"
-            android:inputType="textPassword" />
+            android:hint="@string/form_password"
+            android:inputType="textPassword"
+            tools:ignore="ObsoleteLayoutParam" />
 
         <Button
             android:id="@+id/loginAct_submit"
@@ -41,7 +42,7 @@
             android:padding="10dp"
             android:text="Login"
             style="@style/Widget.AppCompat.Button.Colored"
-            />
+            tools:ignore="ObsoleteLayoutParam" />
 
     </LinearLayout>
 

@@ -29,4 +29,6 @@
     <string name="menu_deconnection">Déconnection</string>
     <string name="actLogin_text">Pour t\'inscrire c\'est</string>
     <string name="actLogin_link">ici</string>
+    <string name="form_mail">Email</string>
+    <string name="form_password">Password</string>
 </resources>

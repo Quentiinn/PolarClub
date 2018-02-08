@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,7 +22,9 @@ import com.google.firebase.auth.FirebaseAuth;
 import static com.example.common.Constants.PREF_POLAR;
 import static com.example.common.Constants.PREF_USER;
 
-public class LoginActivity extends AppCompatActivity implements View.OnClickListener{
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG = "TAG_LOGIN_ACTIVITY";
 
     private static final String BUTTON_SUBMIT = "button_submit";
     private static final String LINK_REGISTER = "link_register";
@@ -58,6 +61,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 if (firebaseAuth.getCurrentUser() != null && preferences.getString(PREF_USER, null) != null) {
+                    Log.i(TAG, "CONNECTION - authStateListener");
                     startActivity(new Intent(LoginActivity.this, MainActivity.class));
                 }
             }
@@ -84,7 +88,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     private void startSignIn() {
         final String email = emailField.getText().toString();
-        String password = passwordField.getText().toString();
+        final String password = passwordField.getText().toString();
 
         if (verif(email, password)) {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
@@ -94,6 +98,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         Toast.makeText(LoginActivity.this, "Sign in problem", Toast.LENGTH_SHORT).show();
                     } else {
                         preferences.edit().putString(PREF_USER, email).apply();
+                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                        finish();
                     }
                 }
             });

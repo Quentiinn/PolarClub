@@ -103,7 +103,15 @@ public class MainActivity extends AppCompatActivity {
             auth.signOut();
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
             startActivity(intent);
-            finish();
         }
     }
+
+    /**
+     * session
+     *      uid: 1
+     *      debut: 1212121212
+     *      frequence
+     *          jeanne: 121
+     *          paul: 123
+     */
 }
