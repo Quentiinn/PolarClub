@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quentincourvoisier.polarclub.R;
+import com.example.quentincourvoisier.polarclub.helper.HelperVerifForm;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
@@ -90,7 +91,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         final String email = emailField.getText().toString();
         final String password = passwordField.getText().toString();
 
-        if (verif(email, password)) {
+        if (HelperVerifForm.formLoginAndRegister(email, password, this)) {
             auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
@@ -104,24 +105,5 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 }
             });
         }
-    }
-
-    private boolean verif(String email, String password) {
-        if (TextUtils.isEmpty(email)) {
-            Toast.makeText(this, "Email not empty", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (!email.contains("@")) {
-            Toast.makeText(this, "Email is not valid", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        if (TextUtils.isEmpty(password)) {
-            Toast.makeText(this, "Password not empty", Toast.LENGTH_SHORT).show();
-            return false;
-        }
-
-        return true;
     }
 }
