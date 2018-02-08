@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.quentincourvoisier.polarclub.R;
+import com.example.quentincourvoisier.polarclub.helper.HelperDate;
 import com.example.quentincourvoisier.polarclub.model.Session;
 
 import java.util.ArrayList;
@@ -51,14 +52,17 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private class SessionViewHolder extends RecyclerView.ViewHolder {
 
         private TextView itemSessionUid;
+        private TextView itemSessionUDateDebut;
 
         SessionViewHolder(View itemView) {
             super(itemView);
             itemSessionUid = itemView.findViewById(R.id.itemSession_uid);
+            itemSessionUDateDebut = itemView.findViewById(R.id.itemSession_dateDebut);
         }
 
         void bind(Session session) {
             itemSessionUid.setText(session.getUid());
+            itemSessionUDateDebut.setText(HelperDate.timestampToDateString(session.getDate()));
         }
     }
 }
