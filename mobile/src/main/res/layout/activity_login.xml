@@ -9,9 +9,38 @@
     tools:context="com.example.quentincourvoisier.polarclub.activities.LoginActivity">
 
     <LinearLayout
+        android:id="@+id/loginAct_logo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <ImageView
+            android:id="@+id/loginAct_img"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:tint="@color/colorTextWhite"
+            android:src="@drawable/logo"
+            android:contentDescription="@string/app_name" />
+
+        <TextView
+            android:id="@+id/loginAct_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/loginAct_img"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/colorTextWhite"
+            android:text="@string/app_name"
+            android:textSize="30sp"
+            tools:ignore="ObsoleteLayoutParam" />
+
+    </LinearLayout>
+
+    <LinearLayout
         android:id="@+id/loginAct_form"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/loginAct_logo"
         android:layout_margin="20dp"
         android:orientation="vertical">
 
@@ -24,7 +53,8 @@
             android:textColor="@color/colorTextWhite"
             android:textColorHint="@color/colorTextWhite"
             android:backgroundTint="@color/colorTextWhite"
-            android:inputType="textEmailAddress" />
+            android:inputType="textEmailAddress"
+            tools:ignore="UnusedAttribute" />
 
         <EditText
             android:id="@+id/loginAct_password"
@@ -39,7 +69,7 @@
             android:textColorHint="@color/colorTextWhite"
             android:backgroundTint="@color/colorTextWhite"
             android:shadowColor="@color/colorTextWhite"
-            tools:ignore="ObsoleteLayoutParam" />
+            tools:ignore="ObsoleteLayoutParam,UnusedAttribute" />
 
         <Button
             android:id="@+id/loginAct_submit"
