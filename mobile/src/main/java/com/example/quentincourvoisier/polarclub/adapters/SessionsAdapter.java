@@ -27,9 +27,9 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void testListSession() {
-        sessions.add(new Session("11111", 123, 100));
-        sessions.add(new Session("11112", 124, 150));
-        sessions.add(new Session("11112", 125, 160));
+        sessions.add(new Session("Aqws87htY6z", 1234578910L));
+        sessions.add(new Session("bsZs87htY6z", 2840587389L));
+        sessions.add(new Session("AA2hGaaWY6z", 1265789036L));
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         void bind(Session session) {
             itemSessionUid.setText(session.getUid());
-            itemSessionUDateDebut.setText(HelperDate.timestampToDateString(session.getDate()));
+            itemSessionUDateDebut.setText(HelperDate.timestampToDateString(session.getDebut()));
         }
     }
 }

@@ -31,4 +31,6 @@
     <string name="actLogin_link">ici</string>
     <string name="form_mail">Email</string>
     <string name="form_password">Password</string>
+    <string name="fragAddSession_date">Date de début de la session</string>
+    <string name="fragAdddSession_heure">Heure de début de la session</string>
 </resources>

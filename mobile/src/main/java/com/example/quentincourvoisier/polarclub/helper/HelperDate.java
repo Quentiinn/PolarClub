@@ -1,5 +1,9 @@
 package com.example.quentincourvoisier.polarclub.helper;
 
+import java.security.Timestamp;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -18,5 +22,16 @@ public class HelperDate {
                 calendar.get(Calendar.DAY_OF_MONTH) + "/" + calendar.get(Calendar.MONTH) + "/" + calendar.get(Calendar.YEAR) + " "
                 + calendar.get(Calendar.HOUR) + ":" + calendar.get(Calendar.MINUTE) + ":" + calendar.get(Calendar.SECOND)
         );
+    }
+
+    public static String datetimeFrToUs(String dateFr) {
+        String[] parts = dateFr.split("/");
+        return parts[2] + '-' + parts[1] + '-' + parts[0];
+    }
+
+    public static long dateToTimestamp(String stringDate) throws ParseException {
+        DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
+        Date date = format.parse(stringDate);
+        return date.getTime() / 1000L;
     }
 }

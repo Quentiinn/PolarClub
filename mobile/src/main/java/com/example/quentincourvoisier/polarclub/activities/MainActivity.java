@@ -105,13 +105,4 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
-
-    /**
-     * session
-     *      uid: 1
-     *      debut: 1212121212
-     *      frequence
-     *          jeanne: 121
-     *          paul: 123
-     */
 }

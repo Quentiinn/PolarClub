@@ -1,5 +1,8 @@
 package com.example.quentincourvoisier.polarclub.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Created by antho on 07/02/2018.
  */
@@ -7,17 +10,15 @@ package com.example.quentincourvoisier.polarclub.model;
 public class Session {
 
     private String uid;
-
-    private long date;
-
-    private int nbHeart;
+    private long debut;
+    private Map<String, Integer> frequences;
 
     public Session() {}
 
-    public Session(String uid, long date, int nbHeart) {
+    public Session(String uid, long debut) {
         this.uid = uid;
-        this.date = date;
-        this.nbHeart = nbHeart;
+        this.debut = debut;
+        this.frequences = new HashMap<>();
     }
 
     public String getUid() {
@@ -28,19 +29,19 @@ public class Session {
         this.uid = uid;
     }
 
-    public long getDate() {
-        return date;
+    public long getDebut() {
+        return debut;
     }
 
-    public void setDate(long date) {
-        this.date = date;
+    public void setDebut(long debut) {
+        this.debut = debut;
     }
 
-    public int getNbHeart() {
-        return nbHeart;
+    public Map<String, Integer> getFrequences() {
+        return frequences;
     }
 
-    public void setNbHeart(int nbHeart) {
-        this.nbHeart = nbHeart;
+    public void setFrequences(Map<String, Integer> frequences) {
+        this.frequences = frequences;
     }
 }

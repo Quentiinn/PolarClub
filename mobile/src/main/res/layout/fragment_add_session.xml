@@ -1,29 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AddSessionFragment"
-    android:gravity="center_vertical|center_horizontal">
+    android:gravity="center_horizontal"
+    tools:context=".fragments.AddSessionFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <LinearLayout
+    <EditText
+        android:id="@+id/addSessionFrag_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_margin="20dp"
+        android:inputType="date"
+        android:focusable="false"
+        android:hint="@string/fragAddSession_date"/>
 
-        <Button
-            android:id="@+id/buttonCreateSession"
-            android:layout_marginLeft="35dp"
-            android:layout_marginRight="35dp"
-            android:paddingTop="20dp"
-            android:paddingBottom="20dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/create_session"
-            style="@style/Widget.AppCompat.Button.Colored" />
+    <EditText
+        android:id="@+id/addSessionFrag_heure"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addSessionFrag_date"
+        android:layout_margin="20dp"
+        android:inputType="time"
+        android:focusable="false"
+        android:hint="@string/fragAdddSession_heure"/>
 
-    </LinearLayout>
+    <Button
+        android:id="@+id/addSessionFrag_btn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/addSessionFrag_heure"
+        android:layout_margin="20dp"
+        android:padding="10dp"
+        android:text="@string/create_session"
+        style="@style/Widget.AppCompat.Button.Colored" />
 
 </RelativeLayout>
