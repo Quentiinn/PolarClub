@@ -11,7 +11,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.common.Constants;
@@ -98,6 +101,10 @@ public class HeartRateFragment extends Fragment implements View.OnClickListener 
         increaseButton.setOnClickListener(this);
         decreaseButton = (Button) rootView.findViewById(R.id.decreaseButton);
         decreaseButton.setOnClickListener(this);
+
+        HeartBeatView imageView = (HeartBeatView) rootView.findViewById(R.id.heartbeat);
+        Animation pulse = AnimationUtils.loadAnimation(getActivity(), R.anim.heart_pulse);
+        imageView.startAnimation(pulse);
         setTag();
 
         br = new BroadcastReceiver() {

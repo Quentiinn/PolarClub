@@ -4,15 +4,29 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
 
+import com.example.common.model.Session;
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.utils.DailyHeartBeat;
+import com.firebase.client.Firebase;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import static com.example.common.Constants.DB_SESSIONS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -39,6 +53,11 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private Button rejoindreButton;
 
+    private EditText session;
+    private EditText pseudo;
+
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -78,6 +97,12 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         rootView = inflater.inflate(R.layout.fragment_home, container, false);
         rejoindreButton = (Button) rootView.findViewById(R.id.rejoindreButton);
         rejoindreButton.setOnClickListener(this);
+
+        session = (EditText) rootView.findViewById(R.id.session);
+        pseudo = (EditText) rootView.findViewById(R.id.pseudo);
+
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
         setTag();
         return rootView;
     }
@@ -110,6 +135,34 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch ((String)v.getTag()){
             case BTN_REJOINDRE:
+                final String nomSession = session.getText().toString();
+                final String pseudoSession = pseudo.getText().toString();
+
+                database.getReference(DB_SESSIONS).orderByKey().equalTo(nomSession).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        if(dataSnapshot.exists()){
+                            Session sessionFirebase = (Session)dataSnapshot.getValue();
+                            sessionFirebase.addParticipant(pseudoSession);
+                            database.getReference().child(nomSession).setValue(sessionFirebase).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if (!task.isSuccessful()){
+                                        Toast.makeText(getActivity() , "Ajout impossible" , Toast.LENGTH_LONG);
+                                    }else{
+                                        Toast.makeText(getActivity() , "Succès" , Toast.LENGTH_LONG);
+
+                                    }
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
                 HeartRateFragment hr = new HeartRateFragment();
                 android.app.FragmentManager fragmentManager = getFragmentManager();
                 fragmentManager.beginTransaction().replace(R.id.content_frame , hr).commit();

@@ -26,7 +26,6 @@ public class DailyHeartBeat {
     public static void updateHearbeat(){
         Random r = new Random();
         int i1 = r.nextInt(40) +80;
-        //hearbeat = i1;
         hearbeat = (int) (r.nextGaussian() * 5 + average);
     }
 

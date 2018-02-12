@@ -1,5 +1,6 @@
-<android.support.wear.widget.BoxInsetLayout xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:tools="http://schemas.android.com/tools"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
 android:id="@+id/container"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
@@ -7,52 +8,63 @@ tools:context="com.example.quentincourvoisier.polarclub.fragments.HeartRateFragm
 
 tools:deviceIds="wear">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_gravity="center"
-    android:orientation="horizontal">
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        >
-
-        <Button
-            android:id="@+id/increaseButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:background="@drawable/ic_add_white_24dp"/>
-
-
-        <Button
-            android:id="@+id/decreaseButton"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_alignBottom="@id/increaseButton"
-            android:layout_toRightOf="@id/increaseButton"
-            android:background="@drawable/ic_remove_black_24dp"/>
-    </LinearLayout>
-
 
     <com.example.quentincourvoisier.polarclub.utils.HeartBeatView
         android:id="@+id/heartbeat"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="25dp"
-        android:layout_weight="1" />
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="10dp"
+        android:layout_weight="1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <TextView
         android:id="@+id/tvheartrate"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="43dp"
+        android:layout_height="27dp"
         android:layout_gravity="center"
+        android:layout_marginTop="30dp"
         android:layout_weight="1"
-        android:gravity="left|center"
-        android:hint="Reading"
+        android:hint="100"
+        android:textAlignment="center"
         android:textColorHint="#eaeaea"
         android:textSize="20sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</RelativeLayout>
-</android.support.wear.widget.BoxInsetLayout>
+    <Button
+        android:id="@+id/increaseButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="25dp"
+        android:layout_marginTop="20dp"
+        android:background="@drawable/ic_add_white_24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heartbeat" />
+
+
+    <Button
+        android:id="@+id/decreaseButton"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@id/increaseButton"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="20dp"
+        android:layout_toRightOf="@id/increaseButton"
+        android:background="@drawable/ic_remove_black_24dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heartbeat" /><![CDATA[>
+
+
+
+
+
+
+]]>
+</android.support.constraint.ConstraintLayout>

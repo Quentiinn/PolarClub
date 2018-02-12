@@ -44,4 +44,8 @@ public class Session {
     public void setFrequences(Map<String, Integer> frequences) {
         this.frequences = frequences;
     }
+
+    public void addParticipant(String pseudo){
+        frequences.put(pseudo, new Integer(80));
+    }
 }
