@@ -1,6 +1,7 @@
 package com.example.quentincourvoisier.polarclub.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,7 +61,7 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         }
 
         void bind(Session session) {
-            itemSessionUid.setText(session.getUid());
+            itemSessionUid.setText(Html.fromHtml("<b>" + session.getUid() + "</b>"));
             itemSessionUDateDebut.setText(HelperDate.timestampToDateString(session.getDebut()));
         }
     }
