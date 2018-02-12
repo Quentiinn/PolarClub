@@ -2,24 +2,22 @@ package com.example.quentincourvoisier.polarclub.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.annotation.NonNull;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.helper.HelperVerifForm;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.example.common.Constants.PREF_POLAR;
 import static com.example.common.Constants.PREF_USER;
 
@@ -34,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText passwordField;
     private Button buttonSubmit;
     private TextView linkRegister;
+    private ProgressBar progressBar;
 
     private FirebaseAuth auth;
     private FirebaseAuth.AuthStateListener authStateListener;
@@ -49,6 +48,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         passwordField = findViewById(R.id.loginAct_password);
         linkRegister = findViewById(R.id.loginAct_link);
         buttonSubmit = findViewById(R.id.loginAct_submit);
+        progressBar = findViewById(R.id.loginAct_loader);
 
         buttonSubmit.setTag(BUTTON_SUBMIT);
         buttonSubmit.setOnClickListener(this);
@@ -58,13 +58,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         preferences = getSharedPreferences(PREF_POLAR, MODE_PRIVATE);
 
         auth = FirebaseAuth.getInstance();
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if (firebaseAuth.getCurrentUser() != null && preferences.getString(PREF_USER, null) != null) {
-                    Log.i(TAG, "CONNECTION - authStateListener");
-                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                }
+        authStateListener = firebaseAuth -> {
+            if (firebaseAuth.getCurrentUser() != null && preferences.getString(PREF_USER, null) != null) {
+                Log.i(TAG, "CONNECTION - authStateListener");
+                startActivity(new Intent(LoginActivity.this, MainActivity.class));
             }
         };
     }
@@ -77,7 +74,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        switch ((String)v.getTag()) {
+        switch ((String) v.getTag()) {
             case BUTTON_SUBMIT:
                 startSignIn();
                 break;
@@ -88,20 +85,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void startSignIn() {
+        progressBar.setVisibility(VISIBLE);
         final String email = emailField.getText().toString();
         final String password = passwordField.getText().toString();
 
         if (HelperVerifForm.formLoginAndRegister(email, password, this)) {
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (!task.isSuccessful()) {
-                        Toast.makeText(LoginActivity.this, "Sign in problem", Toast.LENGTH_SHORT).show();
-                    } else {
-                        preferences.edit().putString(PREF_USER, email).apply();
-                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                        finish();
-                    }
+            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(LoginActivity.this, "Sign in problem", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(GONE);
+                } else {
+                    preferences.edit().putString(PREF_USER, email).apply();
+                    progressBar.setVisibility(GONE);
+                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                    finish();
                 }
             });
         }

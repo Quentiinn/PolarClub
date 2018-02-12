@@ -98,7 +98,7 @@
             android:layout_height="wrap_content"
             android:text="@string/actLogin_text"
             android:textColor="@color/colorTextWhite"
-            android:textSize="18dp"/>
+            android:textSize="18sp"/>
 
         <TextView
             android:id="@+id/loginAct_link"
@@ -112,9 +112,19 @@
             android:text="@string/actLogin_link"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
-            android:textSize="24dp"
+            android:textSize="24sp"
             tools:ignore="ObsoleteLayoutParam" />
 
     </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/loginAct_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:visibility="gone" />
 
 </RelativeLayout>

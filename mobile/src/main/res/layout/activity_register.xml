@@ -55,4 +55,14 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/registerAct_loader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:progressDrawable="@drawable/circular_progress_bar"
+        android:visibility="visible" />
+
 </RelativeLayout>

@@ -10,7 +10,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.common.Constants;
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.fragments.AddSessionFragment;
 import com.example.quentincourvoisier.polarclub.fragments.HomeFragment;

@@ -1,12 +1,10 @@
 package com.example.quentincourvoisier.polarclub.fragments;
 
+import android.app.Fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.annotation.NonNull;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +14,6 @@ import android.widget.Toast;
 
 import com.example.common.model.Session;
 import com.example.quentincourvoisier.polarclub.R;
-import com.example.quentincourvoisier.polarclub.utils.DailyHeartBeat;
-import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
@@ -58,6 +54,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     private FirebaseDatabase database;
     private DatabaseReference reference;
+
     public HomeFragment() {
         // Required empty public constructor
     }
@@ -133,7 +130,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        switch ((String)v.getTag()){
+        switch ((String) v.getTag()) {
             case BTN_REJOINDRE:
                 final String nomSession = session.getText().toString();
                 final String pseudoSession = pseudo.getText().toString();
@@ -141,16 +138,16 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 database.getReference(DB_SESSIONS).orderByKey().equalTo(nomSession).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if(dataSnapshot.exists()){
-                            Session sessionFirebase = (Session)dataSnapshot.getValue();
+                        if (dataSnapshot.exists()) {
+                            Session sessionFirebase = (Session) dataSnapshot.getValue();
                             sessionFirebase.addParticipant(pseudoSession);
                             database.getReference().child(nomSession).setValue(sessionFirebase).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if (!task.isSuccessful()){
-                                        Toast.makeText(getActivity() , "Ajout impossible" , Toast.LENGTH_LONG);
-                                    }else{
-                                        Toast.makeText(getActivity() , "Succès" , Toast.LENGTH_LONG);
+                                    if (!task.isSuccessful()) {
+                                        Toast.makeText(getActivity(), "Ajout impossible", Toast.LENGTH_LONG);
+                                    } else {
+                                        Toast.makeText(getActivity(), "Succès", Toast.LENGTH_LONG);
 
                                     }
                                 }
@@ -165,10 +162,14 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 });
                 HeartRateFragment hr = new HeartRateFragment();
                 android.app.FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame , hr).commit();
+                fragmentManager.beginTransaction().replace(R.id.content_frame, hr).commit();
                 break;
 
         }
+    }
+
+    public void setTag() {
+        rejoindreButton.setTag(BTN_REJOINDRE);
     }
 
     /**
@@ -184,9 +185,5 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    public void setTag(){
-        rejoindreButton.setTag(BTN_REJOINDRE);
     }
 }

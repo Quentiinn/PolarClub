@@ -2,14 +2,14 @@ package com.example.quentincourvoisier.polarclub.activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.quentincourvoisier.polarclub.R;
@@ -20,10 +20,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import static android.view.View.GONE;
+import static android.view.View.VISIBLE;
 import static com.example.common.Constants.PREF_POLAR;
 import static com.example.common.Constants.PREF_USER;
 
-public class RegisterActivity extends AppCompatActivity implements View.OnClickListener{
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "TAG_REGISTER_ACTIVITY";
 
@@ -34,6 +36,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText passwordField;
     private Button submitButton;
     private Button returnButton;
+    private ProgressBar progressBar;
 
     private FirebaseAuth auth;
 
@@ -48,6 +51,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         passwordField = findViewById(R.id.registerAct_password);
         submitButton = findViewById(R.id.registerAct_submit);
         returnButton = findViewById(R.id.registerAct_retour);
+        progressBar = findViewById(R.id.registerAct_loader);
 
         submitButton.setTag(BUTTON_SUBMIT);
         submitButton.setOnClickListener(this);
@@ -61,7 +65,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View v) {
-        switch ((String)v.getTag()) {
+        switch ((String) v.getTag()) {
             case BUTTON_SUBMIT:
                 registerUser();
                 break;
@@ -72,26 +76,25 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void registerUser() {
+        progressBar.setVisibility(VISIBLE);
         final String email = emailField.getText().toString();
         final String password = passwordField.getText().toString();
 
         if (HelperVerifForm.formLoginAndRegister(email, password, this)) {
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                @Override
-                public void onComplete(@NonNull Task<AuthResult> task) {
-                    if (!task.isSuccessful()) {
-                        Toast.makeText(RegisterActivity.this, "Error register", Toast.LENGTH_SHORT).show();
-                    } else {
-                        onAuthSuccess(task.getResult().getUser(), email);
-                    }
+            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this, task -> {
+                if (!task.isSuccessful()) {
+                    Toast.makeText(RegisterActivity.this, "Error register", Toast.LENGTH_SHORT).show();
+                    progressBar.setVisibility(GONE);
+                } else {
+                    onAuthSuccess(task.getResult().getUser(), email);
                 }
             });
         }
     }
 
     private void onAuthSuccess(FirebaseUser user, String email) {
-        Log.i(TAG, "Email = " + user.getEmail());
         preferences.edit().putString(PREF_USER, email).apply();
+        progressBar.setVisibility(GONE);
         startActivity(new Intent(this, MainActivity.class));
     }
 
