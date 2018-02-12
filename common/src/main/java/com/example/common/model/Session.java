@@ -11,13 +11,15 @@ public class Session {
 
     private String uid;
     private long debut;
+    private String prof;
     private Map<String, Integer> frequences;
 
     public Session() {}
 
-    public Session(String uid, long debut) {
+    public Session(String uid, long debut, String prof) {
         this.uid = uid;
         this.debut = debut;
+        this.prof = prof;
         this.frequences = new HashMap<>();
     }
 
@@ -35,6 +37,14 @@ public class Session {
 
     public void setDebut(long debut) {
         this.debut = debut;
+    }
+
+    public String getProf() {
+        return prof;
+    }
+
+    public void setProf(String prof) {
+        this.prof = prof;
     }
 
     public Map<String, Integer> getFrequences() {

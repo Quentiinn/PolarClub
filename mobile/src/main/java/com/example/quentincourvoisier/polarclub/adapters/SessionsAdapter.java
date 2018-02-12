@@ -27,9 +27,9 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     public void testListSession() {
-        sessions.add(new Session("Aqws87htY6z", 1234578910L));
-        sessions.add(new Session("bsZs87htY6z", 2840587389L));
-        sessions.add(new Session("AA2hGaaWY6z", 1265789036L));
+        sessions.add(new Session("Aqws87htY6z", 1234578910L, "Bidule"));
+        sessions.add(new Session("bsZs87htY6z", 2840587389L, "Azerty"));
+        sessions.add(new Session("AA2hGaaWY6z", 1265789036L, "Qwerty"));
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.example.quentincourvoisier.polarclub.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -22,7 +23,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import static android.content.Context.MODE_PRIVATE;
 import static com.example.common.Constants.DB_SESSIONS;
+import static com.example.common.Constants.PREF_POLAR;
+import static com.example.common.Constants.PREF_USER;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -47,6 +51,8 @@ public class AddSessionFragment extends Fragment implements View.OnClickListener
 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+
+    private SharedPreferences preferences;
 
     public AddSessionFragment() {
         // Required empty public constructor
@@ -91,6 +97,8 @@ public class AddSessionFragment extends Fragment implements View.OnClickListener
 
         database = FirebaseDatabase.getInstance();
         databaseReference = database.getReference();
+
+        preferences = getActivity().getSharedPreferences(PREF_POLAR, MODE_PRIVATE);
 
         return root;
     }
@@ -165,16 +173,9 @@ public class AddSessionFragment extends Fragment implements View.OnClickListener
             e.printStackTrace();
         }
 
-        /*
-         * session
-         *      uid: 1
-         *      debut: 1212121212
-         *      frequence
-         *          jeanne: 121
-         *          paul: 123
-         */
         String uid = database.getReference(DB_SESSIONS).push().getKey();
-        Session session = new Session(uid, timestamp);
+        String userName = preferences.getString(PREF_USER, "");
+        Session session = new Session(uid, timestamp, userName);
 
         database.getReference(DB_SESSIONS).child(uid).setValue(session).addOnCompleteListener(task -> {
             if (!task.isSuccessful()) {
