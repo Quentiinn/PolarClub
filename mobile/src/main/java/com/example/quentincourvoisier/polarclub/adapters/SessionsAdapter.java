@@ -1,18 +1,28 @@
 package com.example.quentincourvoisier.polarclub.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.helper.HelperDate;
 import com.example.common.model.Session;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.example.common.Constants.DB_SESSIONS;
 
 /**
  * Created by antho on 07/02/2018.
@@ -20,16 +30,13 @@ import java.util.List;
 
 public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private Context context;
+
     private List<Session> sessions;
 
-    public SessionsAdapter() {
-        sessions = new ArrayList<>();
-    }
-
-    public void testListSession() {
-        sessions.add(new Session("Aqws87htY6z", 1234578910L, "Bidule"));
-        sessions.add(new Session("bsZs87htY6z", 2840587389L, "Azerty"));
-        sessions.add(new Session("AA2hGaaWY6z", 1265789036L, "Qwerty"));
+    public SessionsAdapter(Context context, List<Session> sessions) {
+        this.context = context;
+        this.sessions = sessions;
     }
 
     @Override

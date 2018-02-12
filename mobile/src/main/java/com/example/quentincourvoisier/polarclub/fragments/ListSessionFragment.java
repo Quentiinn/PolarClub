@@ -1,17 +1,29 @@
 package com.example.quentincourvoisier.polarclub.fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.common.model.Session;
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.common.Constants.DB_SESSIONS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -25,6 +37,12 @@ public class ListSessionFragment extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private View root;
+    private RecyclerView rv;
+
+    private List<Session> sessions;
+
+    private FirebaseDatabase database;
+    private DatabaseReference databaseReference;
 
     public ListSessionFragment() {
         // Required empty public constructor
@@ -55,16 +73,17 @@ public class ListSessionFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference();
+        sessions = new ArrayList<>();
 
-        // Inflate the layout for this fragment
-        root= inflater.inflate(R.layout.fragment_list_session, container, false);
-        final RecyclerView rv = root.findViewById(R.id.sessions_recycler_view);
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        SessionsAdapter sa = new SessionsAdapter();
-        sa.testListSession();
-        rv.setAdapter(sa);
+
+        root = inflater.inflate(R.layout.fragment_list_session, container, false);
+
+        rv = root.findViewById(R.id.sessions_recycler_view);
+        recupSessions();
+
         return root;
     }
 
@@ -94,5 +113,31 @@ public class ListSessionFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private void recupSessions() {
+        database.getReference(DB_SESSIONS).orderByKey().addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot.getChildren() != null) {
+                    for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
+                        Session session = postSnapshot.getValue(Session.class);
+                        sessions.add(session);
+                    }
+
+                    LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+                    rv.setLayoutManager(manager);
+                    SessionsAdapter sa = new SessionsAdapter(getActivity(), sessions);
+                    rv.setAdapter(sa);
+                } else {
+                    Toast.makeText(getActivity(), "Pas de résultat", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Toast.makeText(getActivity(), "Pas de résultat", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }
