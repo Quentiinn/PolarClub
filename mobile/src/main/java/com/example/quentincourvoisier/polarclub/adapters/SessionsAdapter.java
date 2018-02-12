@@ -8,10 +8,9 @@ import android.widget.TextView;
 
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.helper.HelperDate;
-import com.example.quentincourvoisier.polarclub.model.Session;
+import com.example.common.model.Session;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**

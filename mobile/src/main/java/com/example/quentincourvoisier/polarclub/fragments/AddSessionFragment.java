@@ -2,27 +2,19 @@ package com.example.quentincourvoisier.polarclub.fragments;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.quentincourvoisier.polarclub.R;
-import com.example.quentincourvoisier.polarclub.activities.MainActivity;
 import com.example.quentincourvoisier.polarclub.helper.HelperDate;
-import com.example.quentincourvoisier.polarclub.model.Session;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.DatabaseError;
+import com.example.common.model.Session;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 

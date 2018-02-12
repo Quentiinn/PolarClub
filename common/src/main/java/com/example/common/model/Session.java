@@ -1,4 +1,4 @@
-package com.example.quentincourvoisier.polarclub.model;
+package com.example.common.model;
 
 import java.util.HashMap;
 import java.util.Map;

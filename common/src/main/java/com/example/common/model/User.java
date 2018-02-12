@@ -1,4 +1,4 @@
-package com.example.quentincourvoisier.polarclub.model;
+package com.example.common.model;
 
 /**
  * Created by antho on 07/02/2018.
