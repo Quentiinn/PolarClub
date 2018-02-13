@@ -4,36 +4,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
-    tools:context=".fragments.AddSessionFragment">
+    android:gravity="center_horizontal">
 
-    <EditText
-        android:id="@+id/addSessionFrag_date"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="20dp"
-        android:inputType="date"
-        android:focusable="false"
-        android:hint="@string/fragAddSession_date"/>
+        android:padding="20dp"
+        android:layout_centerInParent="true"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/addSessionFrag_heure"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addSessionFrag_date"
-        android:layout_margin="20dp"
-        android:inputType="time"
-        android:focusable="false"
-        android:hint="@string/fragAdddSession_heure"/>
+        <EditText
+            android:id="@+id/addSessionFrag_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:focusable="false"
+            android:hint="@string/fragAddSession_date"/>
 
-    <Button
-        android:id="@+id/addSessionFrag_btn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/addSessionFrag_heure"
-        android:layout_margin="20dp"
-        android:padding="10dp"
-        android:text="@string/create_session"
-        style="@style/Widget.AppCompat.Button.Colored" />
+        <EditText
+            android:id="@+id/addSessionFrag_heure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addSessionFrag_date"
+            android:layout_marginTop="20dp"
+            android:inputType="time"
+            android:focusable="false"
+            android:hint="@string/fragAdddSession_heure"
+            tools:ignore="ObsoleteLayoutParam" />
+
+        <Button
+            android:id="@+id/addSessionFrag_btn"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/addSessionFrag_heure"
+            android:layout_marginTop="20dp"
+            android:padding="10dp"
+            android:text="@string/create_session"
+            style="@style/Widget.AppCompat.Button.Colored"
+            tools:ignore="ObsoleteLayoutParam" />
+
+    </LinearLayout>
 
 </RelativeLayout>
