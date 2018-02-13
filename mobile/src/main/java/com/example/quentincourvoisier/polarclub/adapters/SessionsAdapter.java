@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quentincourvoisier.polarclub.R;
+import com.example.quentincourvoisier.polarclub.activities.MainActivity;
 import com.example.quentincourvoisier.polarclub.fragments.UserInSessionFragment;
 import com.example.quentincourvoisier.polarclub.helper.HelperDate;
 import com.example.common.model.Session;
@@ -34,12 +36,14 @@ import static com.example.common.Constants.DB_SESSIONS;
 
 public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private Context context;
+    public static final String ARG_SESSION_UID = "session_uid";
+
+    private MainActivity context;
     private View view;
 
     private List<Session> sessions;
 
-    public SessionsAdapter(Context context, List<Session> sessions) {
+    public SessionsAdapter(MainActivity context, List<Session> sessions) {
         this.context = context;
         this.sessions = sessions;
     }
@@ -55,8 +59,15 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Session session = sessions.get(position);
         ((SessionViewHolder)holder).bind(session);
+
         view.setOnClickListener((arg0 -> {
-            UserInSessionFragment uif = UserInSessionFragment.newInstance();
+            Bundle bundle = new Bundle();
+            bundle.putString(ARG_SESSION_UID, session.getUid() );
+            UserInSessionFragment uif = UserInSessionFragment.newInstance(ARG_SESSION_UID);
+            uif.setArguments(bundle);
+
+            FragmentTransaction fragmentTransaction = context.getFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.content, uif, "FragmentName").commit();
         }));
     }
 

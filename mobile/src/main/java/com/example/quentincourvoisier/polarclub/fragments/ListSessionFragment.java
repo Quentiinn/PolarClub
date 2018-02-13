@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.common.model.Session;
 import com.example.quentincourvoisier.polarclub.R;
+import com.example.quentincourvoisier.polarclub.activities.MainActivity;
 import com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -127,7 +128,7 @@ public class ListSessionFragment extends Fragment {
 
                     LinearLayoutManager manager = new LinearLayoutManager(getActivity());
                     rv.setLayoutManager(manager);
-                    SessionsAdapter sa = new SessionsAdapter(getActivity(), sessions);
+                    SessionsAdapter sa = new SessionsAdapter((MainActivity)getActivity(), sessions);
                     rv.setAdapter(sa);
                 } else {
                     Toast.makeText(getActivity(), "Pas de résultat", Toast.LENGTH_SHORT).show();
