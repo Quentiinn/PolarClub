@@ -165,7 +165,7 @@ public class AddSessionFragment extends Fragment implements View.OnClickListener
     private void createSession() {
         String date = HelperDate.datetimeFrToUs(fieldSessionDate.getText().toString());
         String heure = fieldSessionHeure.getText().toString();
-        long timestamp = HelperDate.dateToTimestamp(date + " " + heure);
+        long timestamp = HelperDate.dateToTimestamp(date + " " + heure + ":00.000");
 
         String uid = database.getReference(DB_SESSIONS).push().getKey();
         String userName = preferences.getString(PREF_USER, "");

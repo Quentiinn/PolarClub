@@ -139,6 +139,7 @@ public class UserInSessionFragment extends Fragment {
                     textViewUid.setText(session.getUid());
                     textViewProf.setText(session.getProf());
                     textViewHeure.setText(HelperDate.timestampToDateString(session.getDebut()));
+                    getActivity().setTitle("Session : " + session.getUid());
                 }
             }
 
