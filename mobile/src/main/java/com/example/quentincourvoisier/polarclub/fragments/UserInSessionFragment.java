@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.quentincourvoisier.polarclub.R;
-import com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter;
 import com.example.quentincourvoisier.polarclub.adapters.UsersAdapter;
 
 /**
@@ -35,12 +34,10 @@ public class UserInSessionFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment UserInSessionFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static UserInSessionFragment newInstance(String param1, String param2) {
+    public static UserInSessionFragment newInstance() {
         UserInSessionFragment fragment = new UserInSessionFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);

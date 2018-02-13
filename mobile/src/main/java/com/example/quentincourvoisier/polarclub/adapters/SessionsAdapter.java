@@ -1,5 +1,8 @@
 package com.example.quentincourvoisier.polarclub.adapters;
 
+import android.annotation.SuppressLint;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -11,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.quentincourvoisier.polarclub.R;
+import com.example.quentincourvoisier.polarclub.fragments.UserInSessionFragment;
 import com.example.quentincourvoisier.polarclub.helper.HelperDate;
 import com.example.common.model.Session;
 import com.google.firebase.database.DataSnapshot;
@@ -31,6 +35,7 @@ import static com.example.common.Constants.DB_SESSIONS;
 public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private Context context;
+    private View view;
 
     private List<Session> sessions;
 
@@ -41,14 +46,18 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_session, parent, false);
+        view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_session, parent, false);
         return new SessionViewHolder(view);
     }
 
+    @SuppressLint("CommitTransaction")
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         Session session = sessions.get(position);
         ((SessionViewHolder)holder).bind(session);
+        view.setOnClickListener((arg0 -> {
+            UserInSessionFragment uif = UserInSessionFragment.newInstance();
+        }));
     }
 
     @Override

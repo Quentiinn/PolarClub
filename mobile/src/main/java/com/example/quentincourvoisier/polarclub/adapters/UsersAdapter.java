@@ -49,14 +49,17 @@ public class UsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private class UserViewHolder extends RecyclerView.ViewHolder {
 
         private TextView itemUserName;
+        private TextView itemUserHeart;
 
         UserViewHolder(View itemView) {
             super(itemView);
             itemUserName = itemView.findViewById(R.id.itemUser_name);
+            itemUserHeart = itemView.findViewById(R.id.itemUser_heart);
         }
 
         void bind(User user) {
             itemUserName.setText(Html.fromHtml("<b>" + user.getName() + "</b>"));
+            itemUserHeart.setText("Batemment du coeur");
         }
     }
 }
