@@ -72,6 +72,10 @@ public class ListSessionFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference();
+        sessions = new ArrayList<>();
+
         if (getArguments() != null) {
 
         }
@@ -79,8 +83,6 @@ public class ListSessionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        sessions = new ArrayList<>();
-
         root = inflater.inflate(R.layout.fragment_list_session, container, false);
 
         rv = root.findViewById(R.id.sessions_recycler_view);
@@ -88,9 +90,6 @@ public class ListSessionFragment extends Fragment {
         rv.setLayoutManager(manager);
         sa = new SessionsAdapter((MainActivity)getActivity(), sessions);
         rv.setAdapter(sa);
-
-        database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference();
 
         return root;
     }
@@ -120,6 +119,20 @@ public class ListSessionFragment extends Fragment {
         mListener = null;
     }
 
+    private void attachChildListener() {
+        if (childEventListener == null) {
+            childEventListener = new SessionEventListener(sa, rv);
+        }
+        databaseReference.child(DB_SESSIONS).addChildEventListener(childEventListener);
+    }
+
+    private void detachChildListener() {
+        if (childEventListener != null) {
+            databaseReference.child(DB_SESSIONS).removeEventListener(childEventListener);
+            childEventListener = null;
+        }
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -133,19 +146,5 @@ public class ListSessionFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private void attachChildListener() {
-        if (childEventListener == null) {
-            childEventListener = new SessionEventListener(sa, rv);
-        }
-        databaseReference.child(DB_SESSIONS).addChildEventListener(childEventListener);
-    }
-
-    private void detachChildListener() {
-        if (childEventListener != null) {
-            databaseReference.child(DB_SESSIONS).removeEventListener(childEventListener);
-            childEventListener = null;
-        }
     }
 }

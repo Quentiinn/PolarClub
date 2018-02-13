@@ -17,7 +17,6 @@ import java.util.GregorianCalendar;
 public class HelperDate {
 
     public static String timestampToDateString(long longDate) {
-        Log.d("HelperDate", String.valueOf(longDate));
         Timestamp timestamp = new Timestamp(longDate);
         Date date = new Date(timestamp.getTime() * 1000);
 

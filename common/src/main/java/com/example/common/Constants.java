@@ -10,7 +10,7 @@ public class Constants {
     public static final String HEART_COUNT_VALUE = "com.iutbm.example.iutbm.couchot.healthybody.HEART_COUNT_VALUE";
 
     public static final String DB_SESSIONS = "sessions";
-    public static final String DB_SESSIONS_UID = "uid";
+    public static final String DB_PARTICIPANTS = "participants";
 
     public static final String PREF_POLAR = "pref_polar";
     public static final String PREF_USER = "pref_user";

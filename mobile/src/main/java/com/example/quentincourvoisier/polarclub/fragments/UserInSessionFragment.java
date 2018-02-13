@@ -1,28 +1,33 @@
 package com.example.quentincourvoisier.polarclub.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.Fragment;
 import android.net.Uri;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.common.model.Participant;
 import com.example.common.model.Session;
 import com.example.quentincourvoisier.polarclub.R;
-import com.example.quentincourvoisier.polarclub.adapters.UsersAdapter;
+import com.example.quentincourvoisier.polarclub.activities.MainActivity;
+import com.example.quentincourvoisier.polarclub.adapters.ParticipantsAdapter;
+import com.example.quentincourvoisier.polarclub.eventListener.ParticipantEventListener;
 import com.example.quentincourvoisier.polarclub.helper.HelperDate;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
-import static com.example.common.Constants.DB_SESSIONS;
-import static com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter.ARG_SESSION_UID;
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.example.common.Constants.DB_PARTICIPANTS;
+import static com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter.ARG_SESSION;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -42,12 +47,15 @@ public class UserInSessionFragment extends Fragment {
     private TextView textViewUid;
     private TextView textViewProf;
     private TextView textViewHeure;
-    private RecyclerView recyclerView;
+    private RecyclerView rv;
+    private ParticipantsAdapter pa;
 
     private Session session;
+    private List<Participant> participants;
 
     private FirebaseDatabase database;
-    private DatabaseReference reference;
+    private DatabaseReference databaseReference;
+    private ChildEventListener childEventListener;
 
     public UserInSessionFragment() {
         // Required empty public constructor
@@ -60,10 +68,10 @@ public class UserInSessionFragment extends Fragment {
      * @return A new instance of fragment UserInSessionFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static UserInSessionFragment newInstance(String sessionUid) {
+    public static UserInSessionFragment newInstance(String session) {
         UserInSessionFragment fragment = new UserInSessionFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_SESSION_UID, sessionUid);
+        args.putSerializable(ARG_SESSION, session);
         fragment.setArguments(args);
         return fragment;
     }
@@ -73,11 +81,11 @@ public class UserInSessionFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         database = FirebaseDatabase.getInstance();
-        reference = database.getReference();
+        databaseReference = database.getReference();
+        participants = new ArrayList<>();
 
         if (getArguments() != null) {
-            String sessionUid = getArguments().getString(ARG_SESSION_UID, "");
-            recupSession(sessionUid);
+            session = (Session) getArguments().getSerializable(ARG_SESSION);
         }
     }
 
@@ -85,10 +93,19 @@ public class UserInSessionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_user_in_session, container, false);
 
-        recyclerView = root.findViewById(R.id.users_recycler_view);
+        rv = root.findViewById(R.id.users_recycler_view);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        rv.setLayoutManager(manager);
+        pa = new ParticipantsAdapter((MainActivity) getActivity(), participants);
+        rv.setAdapter(pa);
+
         textViewUid = root.findViewById(R.id.userInSessionFrag_uid);
         textViewProf = root.findViewById(R.id.userInSessionFrag_prof);
         textViewHeure = root.findViewById(R.id.userInSessionFrag_heure);
+
+        textViewUid.setText(session.getUid());
+        textViewProf.setText(session.getProf());
+        textViewHeure.setText(HelperDate.timestampToDateString(session.getDebut()));
 
         return root;
     }
@@ -101,9 +118,36 @@ public class UserInSessionFragment extends Fragment {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        attachChildListener();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        detachChildListener();
+    }
+
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @SuppressLint("LongLogTag")
+    private void attachChildListener() {
+        if (childEventListener == null) {
+            childEventListener = new ParticipantEventListener(pa, rv);
+        }
+        databaseReference.child(DB_PARTICIPANTS).orderByChild("uidSession").equalTo(session.getUid()).addChildEventListener(childEventListener);
+    }
+
+    private void detachChildListener() {
+        if (childEventListener != null) {
+            databaseReference.child(DB_PARTICIPANTS).removeEventListener(childEventListener);
+            childEventListener = null;
+        }
     }
 
     /**
@@ -119,34 +163,5 @@ public class UserInSessionFragment extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
-    }
-
-    private void recupSession(String sessionUid) {
-        reference.child(DB_SESSIONS).child(sessionUid).addListenerForSingleValueEvent(new ValueEventListener() {
-            @SuppressLint("LongLogTag")
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.exists()) {
-                    session = dataSnapshot.getValue(Session.class);
-
-                    textViewUid.setText(session.getUid());
-                    textViewProf.setText(session.getProf());
-                    textViewHeure.setText(HelperDate.timestampToDateString(session.getDebut()));
-                    getActivity().setTitle("Session : " + session.getUid());
-
-                    if (session.getParticipants() != null) {
-                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-                        UsersAdapter ua = new UsersAdapter(session.getParticipants());
-                        ua.testListUser();
-                        recyclerView.setAdapter(ua);
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 }

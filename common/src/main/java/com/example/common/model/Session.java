@@ -1,5 +1,6 @@
 package com.example.common.model;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,12 +10,11 @@ import java.util.Map;
  * Created by antho on 07/02/2018.
  */
 
-public class Session {
+public class Session implements Serializable{
 
     private String uid;
     private long debut;
     private String prof;
-    private List<Participant> participants;
 
     public Session() {}
 
@@ -22,7 +22,6 @@ public class Session {
         this.uid = uid;
         this.debut = debut;
         this.prof = prof;
-        participants = new ArrayList<>();
     }
 
     public String getUid() {
@@ -47,17 +46,5 @@ public class Session {
 
     public void setProf(String prof) {
         this.prof = prof;
-    }
-
-    public List<Participant> getParticipants() {
-        return participants;
-    }
-
-    public void setParticipants(List<Participant> participants) {
-        this.participants = participants;
-    }
-
-    public void addParticipant(Participant participant) {
-        participants.add(participant);
     }
 }

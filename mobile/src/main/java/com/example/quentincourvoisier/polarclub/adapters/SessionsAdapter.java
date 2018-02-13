@@ -36,7 +36,7 @@ import static com.example.common.Constants.DB_SESSIONS;
 
 public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    public static final String ARG_SESSION_UID = "session_uid";
+    public static final String ARG_SESSION = "session";
 
     private MainActivity context;
     private View view;
@@ -62,8 +62,8 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
         view.setOnClickListener((arg0 -> {
             Bundle bundle = new Bundle();
-            bundle.putString(ARG_SESSION_UID, session.getUid() );
-            UserInSessionFragment uif = UserInSessionFragment.newInstance(ARG_SESSION_UID);
+            bundle.putSerializable(ARG_SESSION, session);
+            UserInSessionFragment uif = UserInSessionFragment.newInstance(ARG_SESSION);
             uif.setArguments(bundle);
 
             FragmentTransaction fragmentTransaction = context.getFragmentManager().beginTransaction();

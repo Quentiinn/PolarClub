@@ -9,6 +9,7 @@ import android.widget.TextView;
 
 import com.example.common.model.Participant;
 import com.example.quentincourvoisier.polarclub.R;
+import com.example.quentincourvoisier.polarclub.activities.MainActivity;
 
 import java.util.List;
 
@@ -16,16 +17,14 @@ import java.util.List;
  * Created by antho on 07/02/2018.
  */
 
-public class UsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class ParticipantsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+    private MainActivity context;
     private List<Participant> participants;
 
-    public UsersAdapter(List<Participant> participants) {
+    public ParticipantsAdapter(MainActivity context, List<Participant> participants) {
+        this.context = context;
         this.participants = participants;
-    }
-
-    public void testListUser() {
-
     }
 
     @Override
@@ -46,6 +45,10 @@ public class UsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return participants.size();
     }
 
+    public void addParticipant(Participant participant) {
+        participants.add(participant);
+    }
+
     private class UserViewHolder extends RecyclerView.ViewHolder {
 
         private TextView itemUserName;
@@ -59,7 +62,7 @@ public class UsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         void bind(Participant participant) {
             itemUserName.setText(Html.fromHtml("<b>" + participant.getName() + "</b>"));
-            itemUserHeart.setText(participant.getBattements());
+            itemUserHeart.setText(String.valueOf(participant.getBattements()));
         }
     }
 }
