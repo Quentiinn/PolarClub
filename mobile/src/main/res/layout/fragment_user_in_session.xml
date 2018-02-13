@@ -1,10 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:gravity="center_horizontal"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.UserInSessionFragment">
+
+    <LinearLayout
+        android:id="@+id/userInSessionFrag_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/userInSessionFrag_uid"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/userInSessionFrag_prof"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/userInSessionFrag_uid"
+            android:textSize="16sp"
+            tools:ignore="ObsoleteLayoutParam" />
+
+        <TextView
+            android:id="@+id/userInSessionFrag_heure"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/userInSessionFrag_prof"
+            android:textSize="16sp"
+            tools:ignore="ObsoleteLayoutParam" />
+
+    </LinearLayout>
 
     <!-- TODO: Update blank fragment layout -->
     <android.support.v7.widget.RecyclerView
@@ -13,7 +45,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_below="@id/userInSessionFrag_header"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/layout_user" />
 
-</FrameLayout>
+</RelativeLayout>

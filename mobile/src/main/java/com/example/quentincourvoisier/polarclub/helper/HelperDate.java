@@ -29,9 +29,14 @@ public class HelperDate {
         return parts[2] + '-' + parts[1] + '-' + parts[0];
     }
 
-    public static long dateToTimestamp(String stringDate) throws ParseException {
+    public static long dateToTimestamp(String stringDate)  {
         DateFormat format = new SimpleDateFormat("yyyy-mm-dd");
-        Date date = format.parse(stringDate);
+        Date date = null;
+        try {
+            date = format.parse(stringDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         return date.getTime() / 1000L;
     }
 }
