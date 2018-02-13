@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,8 +20,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.text.ParseException;
 
 import static com.example.common.Constants.DB_SESSIONS;
 import static com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter.ARG_SESSION_UID;
@@ -45,6 +42,7 @@ public class UserInSessionFragment extends Fragment {
     private TextView textViewUid;
     private TextView textViewProf;
     private TextView textViewHeure;
+    private RecyclerView recyclerView;
 
     private Session session;
 
@@ -86,16 +84,11 @@ public class UserInSessionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_user_in_session, container, false);
-        final RecyclerView rv = root.findViewById(R.id.users_recycler_view);
 
+        recyclerView = root.findViewById(R.id.users_recycler_view);
         textViewUid = root.findViewById(R.id.userInSessionFrag_uid);
         textViewProf = root.findViewById(R.id.userInSessionFrag_prof);
         textViewHeure = root.findViewById(R.id.userInSessionFrag_heure);
-
-        rv.setLayoutManager(new LinearLayoutManager(getActivity()));
-        UsersAdapter ua = new UsersAdapter();
-        ua.testListUser();
-        rv.setAdapter(ua);
 
         return root;
     }
@@ -140,6 +133,13 @@ public class UserInSessionFragment extends Fragment {
                     textViewProf.setText(session.getProf());
                     textViewHeure.setText(HelperDate.timestampToDateString(session.getDebut()));
                     getActivity().setTitle("Session : " + session.getUid());
+
+                    if (session.getParticipants() != null) {
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+                        UsersAdapter ua = new UsersAdapter(session.getParticipants());
+                        ua.testListUser();
+                        recyclerView.setAdapter(ua);
+                    }
                 }
             }
 

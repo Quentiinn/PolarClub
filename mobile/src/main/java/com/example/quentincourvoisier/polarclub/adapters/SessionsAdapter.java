@@ -76,6 +76,10 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         return sessions.size();
     }
 
+    public void addSession(Session session) {
+        sessions.add(session);
+    }
+
     private class SessionViewHolder extends RecyclerView.ViewHolder {
 
         private TextView itemSessionUid;

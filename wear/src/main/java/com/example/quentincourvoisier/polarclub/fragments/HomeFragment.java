@@ -138,21 +138,21 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 database.getReference(DB_SESSIONS).orderByKey().equalTo(nomSession).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.exists()) {
-                            Session sessionFirebase = (Session) dataSnapshot.getValue();
-                            sessionFirebase.addParticipant(pseudoSession);
-                            database.getReference().child(nomSession).setValue(sessionFirebase).addOnCompleteListener(new OnCompleteListener<Void>() {
-                                @Override
-                                public void onComplete(@NonNull Task<Void> task) {
-                                    if (!task.isSuccessful()) {
-                                        Toast.makeText(getActivity(), "Ajout impossible", Toast.LENGTH_LONG);
-                                    } else {
-                                        Toast.makeText(getActivity(), "Succès", Toast.LENGTH_LONG);
-
-                                    }
-                                }
-                            });
-                        }
+//                        if (dataSnapshot.exists()) {
+//                            Session sessionFirebase = (Session) dataSnapshot.getValue();
+//                            sessionFirebase.addParticipant(pseudoSession);
+//                            database.getReference().child(nomSession).setValue(sessionFirebase).addOnCompleteListener(new OnCompleteListener<Void>() {
+//                                @Override
+//                                public void onComplete(@NonNull Task<Void> task) {
+//                                    if (!task.isSuccessful()) {
+//                                        Toast.makeText(getActivity(), "Ajout impossible", Toast.LENGTH_LONG);
+//                                    } else {
+//                                        Toast.makeText(getActivity(), "Succès", Toast.LENGTH_LONG);
+//
+//                                    }
+//                                }
+//                            });
+//                        }
                     }
 
                     @Override

@@ -7,10 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.common.model.User;
+import com.example.common.model.Participant;
 import com.example.quentincourvoisier.polarclub.R;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,10 +18,10 @@ import java.util.List;
 
 public class UsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<User> users;
+    private List<Participant> participants;
 
-    public UsersAdapter() {
-        users = new ArrayList<>();
+    public UsersAdapter(List<Participant> participants) {
+        this.participants = participants;
     }
 
     public void testListUser() {
@@ -37,13 +36,14 @@ public class UsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        User user = users.get(position);
-        ((UserViewHolder)holder).bind(user);
+        Participant participant = participants.get(position);
+
+        ((UserViewHolder)holder).bind(participant);
     }
 
     @Override
     public int getItemCount() {
-        return users.size();
+        return participants.size();
     }
 
     private class UserViewHolder extends RecyclerView.ViewHolder {
@@ -57,9 +57,9 @@ public class UsersAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             itemUserHeart = itemView.findViewById(R.id.itemUser_heart);
         }
 
-        void bind(User user) {
-            itemUserName.setText(Html.fromHtml("<b>" + user.getName() + "</b>"));
-            itemUserHeart.setText("Batemment du coeur");
+        void bind(Participant participant) {
+            itemUserName.setText(Html.fromHtml("<b>" + participant.getName() + "</b>"));
+            itemUserHeart.setText(participant.getBattements());
         }
     }
 }

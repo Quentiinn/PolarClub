@@ -5,16 +5,17 @@ import android.os.Bundle;
 import android.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.quentincourvoisier.polarclub.eventListener.SessionEventListener;
 import com.example.common.model.Session;
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.activities.MainActivity;
 import com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,11 +40,13 @@ public class ListSessionFragment extends Fragment {
     private OnFragmentInteractionListener mListener;
     private View root;
     private RecyclerView rv;
+    private SessionsAdapter sa;
 
     private List<Session> sessions;
 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
+    private ChildEventListener childEventListener;
 
     public ListSessionFragment() {
         // Required empty public constructor
@@ -68,6 +71,7 @@ public class ListSessionFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         if (getArguments() != null) {
 
         }
@@ -75,15 +79,18 @@ public class ListSessionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        database = FirebaseDatabase.getInstance();
-        databaseReference = database.getReference();
         sessions = new ArrayList<>();
-
 
         root = inflater.inflate(R.layout.fragment_list_session, container, false);
 
         rv = root.findViewById(R.id.sessions_recycler_view);
-        recupSessions();
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity());
+        rv.setLayoutManager(manager);
+        sa = new SessionsAdapter((MainActivity)getActivity(), sessions);
+        rv.setAdapter(sa);
+
+        database = FirebaseDatabase.getInstance();
+        databaseReference = database.getReference();
 
         return root;
     }
@@ -93,6 +100,18 @@ public class ListSessionFragment extends Fragment {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        attachChildListener();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        detachChildListener();
     }
 
     @Override
@@ -116,29 +135,17 @@ public class ListSessionFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    private void recupSessions() {
-        database.getReference(DB_SESSIONS).orderByKey().addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.getChildren() != null) {
-                    for (DataSnapshot postSnapshot: dataSnapshot.getChildren()) {
-                        Session session = postSnapshot.getValue(Session.class);
-                        sessions.add(session);
-                    }
+    private void attachChildListener() {
+        if (childEventListener == null) {
+            childEventListener = new SessionEventListener(sa, rv);
+        }
+        databaseReference.child(DB_SESSIONS).addChildEventListener(childEventListener);
+    }
 
-                    LinearLayoutManager manager = new LinearLayoutManager(getActivity());
-                    rv.setLayoutManager(manager);
-                    SessionsAdapter sa = new SessionsAdapter((MainActivity)getActivity(), sessions);
-                    rv.setAdapter(sa);
-                } else {
-                    Toast.makeText(getActivity(), "Pas de résultat", Toast.LENGTH_SHORT).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(getActivity(), "Pas de résultat", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void detachChildListener() {
+        if (childEventListener != null) {
+            databaseReference.child(DB_SESSIONS).removeEventListener(childEventListener);
+            childEventListener = null;
+        }
     }
 }

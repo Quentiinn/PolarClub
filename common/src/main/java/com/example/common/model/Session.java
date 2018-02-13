@@ -1,6 +1,8 @@
 package com.example.common.model;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -12,7 +14,7 @@ public class Session {
     private String uid;
     private long debut;
     private String prof;
-    private Map<String, Integer> frequences;
+    private List<Participant> participants;
 
     public Session() {}
 
@@ -20,7 +22,7 @@ public class Session {
         this.uid = uid;
         this.debut = debut;
         this.prof = prof;
-        this.frequences = new HashMap<>();
+        participants = new ArrayList<>();
     }
 
     public String getUid() {
@@ -47,15 +49,15 @@ public class Session {
         this.prof = prof;
     }
 
-    public Map<String, Integer> getFrequences() {
-        return frequences;
+    public List<Participant> getParticipants() {
+        return participants;
     }
 
-    public void setFrequences(Map<String, Integer> frequences) {
-        this.frequences = frequences;
+    public void setParticipants(List<Participant> participants) {
+        this.participants = participants;
     }
 
-    public void addParticipant(String pseudo){
-        frequences.put(pseudo, new Integer(80));
+    public void addParticipant(Participant participant) {
+        participants.add(participant);
     }
 }
