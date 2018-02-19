@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.common.model.Participant;
 import com.example.common.model.Session;
 import com.example.quentincourvoisier.polarclub.R;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -22,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import static com.example.common.Constants.DB_PARTICIPANTS;
 import static com.example.common.Constants.DB_SESSIONS;
 
 /**
@@ -84,6 +87,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
     }
 
     @Override
@@ -98,8 +102,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         session = (EditText) rootView.findViewById(R.id.session);
         pseudo = (EditText) rootView.findViewById(R.id.pseudo);
 
-        database = FirebaseDatabase.getInstance();
-        reference = database.getReference();
+
         setTag();
         return rootView;
     }
@@ -134,35 +137,33 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case BTN_REJOINDRE:
                 final String nomSession = session.getText().toString();
                 final String pseudoSession = pseudo.getText().toString();
-
-                database.getReference(DB_SESSIONS).orderByKey().equalTo(nomSession).addListenerForSingleValueEvent(new ValueEventListener() {
+                database = FirebaseDatabase.getInstance();
+                reference = database.getReference();
+                database.getReference(DB_SESSIONS).orderByKey().equalTo("-L5EyItiZV-1tyhUDodh").addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-//                        if (dataSnapshot.exists()) {
+
+
+
+                        if (dataSnapshot.exists()) {
+                            Log.i("passe" , "ototo");
+                            Participant participant = new Participant(pseudoSession, 80);
+                            participant.setUidSession(nomSession);
+                            String uid = database.getReference(DB_PARTICIPANTS).push().getKey();
 //                            Session sessionFirebase = (Session) dataSnapshot.getValue();
-//                            sessionFirebase.addParticipant(pseudoSession);
-//                            database.getReference().child(nomSession).setValue(sessionFirebase).addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                @Override
-//                                public void onComplete(@NonNull Task<Void> task) {
-//                                    if (!task.isSuccessful()) {
-//                                        Toast.makeText(getActivity(), "Ajout impossible", Toast.LENGTH_LONG);
-//                                    } else {
-//                                        Toast.makeText(getActivity(), "Succès", Toast.LENGTH_LONG);
-//
-//                                    }
-//                                }
-//                            });
-//                        }
+                            database.getReference(DB_PARTICIPANTS).child(uid).setValue(participant);
+                            HeartRateFragment hr = new HeartRateFragment();
+                            android.app.FragmentManager fragmentManager = getFragmentManager();
+                            fragmentManager.beginTransaction().replace(R.id.content_frame, hr).commit();
+                        }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        Log.i("passe pas" , "azeazeaz");
                     }
                 });
-                HeartRateFragment hr = new HeartRateFragment();
-                android.app.FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, hr).commit();
+
                 break;
 
         }
