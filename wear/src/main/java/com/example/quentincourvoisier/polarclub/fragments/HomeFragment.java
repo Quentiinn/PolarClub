@@ -139,28 +139,25 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 final String pseudoSession = pseudo.getText().toString();
                 database = FirebaseDatabase.getInstance();
                 reference = database.getReference();
-                database.getReference(DB_SESSIONS).orderByKey().equalTo("-L5EyItiZV-1tyhUDodh").addListenerForSingleValueEvent(new ValueEventListener() {
+                database.getReference(DB_SESSIONS).orderByKey().equalTo(nomSession).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-
                         if (dataSnapshot.exists()) {
-                            Log.i("passe" , "ototo");
                             Participant participant = new Participant(pseudoSession, 80);
                             participant.setUidSession(nomSession);
                             String uid = database.getReference(DB_PARTICIPANTS).push().getKey();
-//                            Session sessionFirebase = (Session) dataSnapshot.getValue();
                             database.getReference(DB_PARTICIPANTS).child(uid).setValue(participant);
                             HeartRateFragment hr = new HeartRateFragment();
+                            Bundle bundle = new Bundle();
+                            bundle.putString("idParticipant" , uid);
+                            hr.setArguments(bundle);
                             android.app.FragmentManager fragmentManager = getFragmentManager();
                             fragmentManager.beginTransaction().replace(R.id.content_frame, hr).commit();
                         }
                     }
-
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-                        Log.i("passe pas" , "azeazeaz");
+
                     }
                 });
 

@@ -22,6 +22,10 @@ import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.services.WearHearbeatEmulatorService;
 import com.example.quentincourvoisier.polarclub.utils.DailyHeartBeat;
 import com.example.quentincourvoisier.polarclub.utils.HeartBeatView;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import static com.example.common.Constants.DB_PARTICIPANTS;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -54,6 +58,11 @@ public class HeartRateFragment extends Fragment implements View.OnClickListener 
     private Button increaseButton;
     private Button decreaseButton;
 
+
+    private String idSession;
+
+    private FirebaseDatabase database;
+    private DatabaseReference reference;
 
     private int averageHeartBeat = 80;
 
@@ -88,6 +97,8 @@ public class HeartRateFragment extends Fragment implements View.OnClickListener 
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        idSession = getArguments().getString("idParticipant");
+        Log.i("idParticipant" , idSession);
     }
 
     @Override
@@ -107,12 +118,15 @@ public class HeartRateFragment extends Fragment implements View.OnClickListener 
         imageView.startAnimation(pulse);
         setTag();
 
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
         br = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 int hearbeats = intent.getExtras().getInt(Constants.HEART_COUNT_VALUE);
                 Log.i("azeaz" , String.valueOf(hearbeats));
                 mTextView.setText(String.valueOf(hearbeats));
+                database.getReference(DB_PARTICIPANTS).child(idSession).child("battements").setValue(hearbeats);
                 //SynchronizeAsyncTask mSynchronizeAsyncTask = new SynchronizeAsyncTask(getActivity());
                 //mSynchronizeAsyncTask.execute(new Integer(hearbeats));
             }
