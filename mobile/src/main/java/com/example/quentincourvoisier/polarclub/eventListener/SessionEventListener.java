@@ -43,7 +43,8 @@ public class SessionEventListener implements ChildEventListener {
 
     @Override
     public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+        Session session = dataSnapshot.getValue(Session.class);
+        sessionsAdapter.deleteSession(session);
     }
 
     @Override

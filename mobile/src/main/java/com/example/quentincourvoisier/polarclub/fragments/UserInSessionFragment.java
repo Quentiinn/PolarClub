@@ -34,9 +34,12 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 
@@ -120,7 +123,6 @@ public class UserInSessionFragment extends Fragment {
                 @Override
                 public void onReceive(Context context, Intent intent) {
                     boolean isFinish = intent.getBooleanExtra(Constants.TIME_SESSION_VALUE, false);
-                    Log.d(TAG, String.valueOf(isFinish));
                     if (isFinish) {
                         getActivity().unregisterReceiver(br);
                         deleteSession(session);
@@ -203,33 +205,46 @@ public class UserInSessionFragment extends Fragment {
 
     @SuppressLint("LongLogTag")
     private void deleteSession(Session session) {
-        database.getReference(DB_SESSIONS).child(session.getUid()).removeValue((databaseError, databaseReference) -> {
-            if (databaseError == null) {
-                database.getReference(DB_PARTICIPANTS).orderByChild("uidSession").equalTo(session.getUid()).addValueEventListener(new ValueEventListener() {
+        database.getReference(DB_SESSIONS).child(session.getUid()).runTransaction(new Transaction.Handler() {
+            @Override
+            public Transaction.Result doTransaction(MutableData mutableData) {
+                database.getReference(DB_SESSIONS).child(session.getUid()).removeValue(new DatabaseReference.CompletionListener() {
                     @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
-                            appleSnapshot.getRef().removeValue();
+                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                        if (databaseError == null) {
+                            database.getReference(DB_PARTICIPANTS).orderByChild("uidSession").equalTo(session.getUid()).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+                                        appleSnapshot.getRef().removeValue();
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+                                    Log.d(TAG, String.valueOf(databaseError));
+                                }
+                            });
                         }
-
-                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
-                        alert.setTitle("Fin de session");
-                        alert.setMessage("Bravo vous êtes arrivé au bout de la session. Elle est maintenant terminé");
-
-                        alert.setPositiveButton("Finir", (dialog, which) -> {
-                            ListSessionFragment fragment = new ListSessionFragment();
-                            FragmentManager manager = getFragmentManager();
-                            manager.beginTransaction().replace(R.id.content, fragment, "FragmentName").commit();
-                        });
-
-                        alert.show();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.d(TAG, String.valueOf(databaseError));
                     }
                 });
+
+                return null;
+            }
+
+            @Override
+            public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                alert.setTitle("Fin de session");
+                alert.setMessage("Bravo vous êtes arrivé au bout de la session. Elle est maintenant terminé");
+
+                alert.setPositiveButton("Finir", (dialog, which) -> {
+                    ListSessionFragment fragment = new ListSessionFragment();
+                    FragmentManager manager = getFragmentManager();
+                    manager.beginTransaction().replace(R.id.content, fragment, "FragmentName").commit();
+                });
+
+                alert.show();
             }
         });
     }

@@ -60,7 +60,7 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         Session session = sessions.get(position);
         ((SessionViewHolder)holder).bind(session);
 
-        view.setOnClickListener((arg0 -> {
+        view.setOnClickListener((arg -> {
             Bundle bundle = new Bundle();
             bundle.putSerializable(ARG_SESSION, session);
             UserInSessionFragment uif = UserInSessionFragment.newInstance(ARG_SESSION);
@@ -78,6 +78,12 @@ public class SessionsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public void addSession(Session session) {
         sessions.add(session);
+    }
+
+    public void deleteSession(Session session) {
+        int index = sessions.indexOf(session);
+        sessions.remove(index);
+        notifyItemRemoved(index);
     }
 
     private class SessionViewHolder extends RecyclerView.ViewHolder {

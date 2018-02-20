@@ -76,6 +76,8 @@ public class ListSessionFragment extends Fragment {
         databaseReference = database.getReference();
         sessions = new ArrayList<>();
 
+
+
         if (getArguments() != null) {
 
         }
@@ -84,6 +86,7 @@ public class ListSessionFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_list_session, container, false);
+        sessions.clear();
 
         rv = root.findViewById(R.id.sessions_recycler_view);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
