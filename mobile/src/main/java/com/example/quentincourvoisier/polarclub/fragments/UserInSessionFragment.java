@@ -4,10 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
@@ -39,12 +37,9 @@ import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Timer;
 
-import static com.example.common.Constants.DB_PARTICIPANTS;
-import static com.example.common.Constants.DB_PARTICIPANTS;
 import static com.example.common.Constants.DB_PARTICIPANTS;
 import static com.example.common.Constants.DB_SESSIONS;
 import static com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter.ARG_SESSION;
@@ -215,7 +210,7 @@ public class UserInSessionFragment extends Fragment {
                             database.getReference(DB_PARTICIPANTS).orderByChild("uidSession").equalTo(session.getUid()).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(DataSnapshot dataSnapshot) {
-                                    for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+                                    for (DataSnapshot appleSnapshot : dataSnapshot.getChildren()) {
                                         appleSnapshot.getRef().removeValue();
                                     }
                                 }

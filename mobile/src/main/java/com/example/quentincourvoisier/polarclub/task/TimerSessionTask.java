@@ -2,7 +2,6 @@ package com.example.quentincourvoisier.polarclub.task;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.example.common.Constants;
 
@@ -31,7 +30,7 @@ public class TimerSessionTask extends TimerTask {
 
         Intent intent = new Intent();
         intent.setAction(Constants.TIME_SESSION_MESSAGE);
-        intent.putExtra(Constants.TIME_SESSION_VALUE, isFinish(timestampActual) );
+        intent.putExtra(Constants.TIME_SESSION_VALUE, isFinish(timestampActual));
         context.sendBroadcast(intent);
     }
 
