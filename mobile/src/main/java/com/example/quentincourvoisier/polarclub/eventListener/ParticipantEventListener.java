@@ -36,9 +36,13 @@ public class ParticipantEventListener implements ChildEventListener {
         recyclerView.scrollToPosition(participantsAdapter.getItemCount() - 1);
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+        Log.d(TAG, "onChildChanged");
 
+        Participant participant = dataSnapshot.getValue(Participant.class);
+        participantsAdapter.changeHeart(participant);
     }
 
     @Override

@@ -6,6 +6,7 @@ package com.example.common.model;
 
 public class Participant {
 
+    private String uid;
     private String uidSession;
     private String name;
     private int battements;
@@ -15,6 +16,14 @@ public class Participant {
     public Participant(String name, int battement) {
         this.name = name;
         this.battements = battement;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getUidSession() {

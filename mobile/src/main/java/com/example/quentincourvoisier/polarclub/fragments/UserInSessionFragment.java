@@ -96,7 +96,7 @@ public class UserInSessionFragment extends Fragment {
         rv = root.findViewById(R.id.users_recycler_view);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(manager);
-        pa = new ParticipantsAdapter((MainActivity) getActivity(), participants);
+        pa = new ParticipantsAdapter((MainActivity) getActivity(), participants, session.getUid());
         rv.setAdapter(pa);
 
         textViewUid = root.findViewById(R.id.userInSessionFrag_uid);

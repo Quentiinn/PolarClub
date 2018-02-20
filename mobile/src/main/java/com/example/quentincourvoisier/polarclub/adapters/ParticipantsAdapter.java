@@ -21,10 +21,12 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private MainActivity context;
     private List<Participant> participants;
+    private String uidSession;
 
-    public ParticipantsAdapter(MainActivity context, List<Participant> participants) {
+    public ParticipantsAdapter(MainActivity context, List<Participant> participants, final String uidSession) {
         this.context = context;
         this.participants = participants;
+        this.uidSession = uidSession;
     }
 
     @Override
@@ -47,6 +49,19 @@ public class ParticipantsAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void addParticipant(Participant participant) {
         participants.add(participant);
+    }
+
+    public void changeHeart(Participant participant) {
+       if (uidSession.equals(participant.getUidSession())) {
+           for (Participant p: participants) {
+               if (participant.getUid().equals(p.getUid())) {
+                   participants.set(participants.indexOf(p), participant);
+                   break;
+               }
+           }
+
+           notifyDataSetChanged();
+       }
     }
 
     private class UserViewHolder extends RecyclerView.ViewHolder {

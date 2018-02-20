@@ -1,23 +1,18 @@
 package com.example.quentincourvoisier.polarclub.fragments;
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.common.model.Participant;
-import com.example.common.model.Session;
 import com.example.quentincourvoisier.polarclub.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -83,6 +78,10 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        database = FirebaseDatabase.getInstance();
+        reference = database.getReference();
+
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -137,8 +136,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
             case BTN_REJOINDRE:
                 final String nomSession = session.getText().toString();
                 final String pseudoSession = pseudo.getText().toString();
-                database = FirebaseDatabase.getInstance();
-                reference = database.getReference();
+
                 database.getReference(DB_SESSIONS).orderByKey().equalTo(nomSession).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -146,15 +144,19 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                             Participant participant = new Participant(pseudoSession, 80);
                             participant.setUidSession(nomSession);
                             String uid = database.getReference(DB_PARTICIPANTS).push().getKey();
+                            participant.setUid(uid);
+
                             database.getReference(DB_PARTICIPANTS).child(uid).setValue(participant);
+
                             HeartRateFragment hr = new HeartRateFragment();
                             Bundle bundle = new Bundle();
-                            bundle.putString("idParticipant" , uid);
+                            bundle.putString("idParticipant", uid);
                             hr.setArguments(bundle);
-                            android.app.FragmentManager fragmentManager = getFragmentManager();
+                            FragmentManager fragmentManager = getFragmentManager();
                             fragmentManager.beginTransaction().replace(R.id.content_frame, hr).commit();
                         }
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
