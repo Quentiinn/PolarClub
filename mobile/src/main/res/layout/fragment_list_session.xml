@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
+        android:layout_marginBottom="@dimen/activity_vertical_bigmargin"
         app:layoutManager="LinearLayoutManager"
         tools:listitem="@layout/layout_session" />
 

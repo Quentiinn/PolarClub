@@ -1,7 +1,15 @@
 package com.example.quentincourvoisier.polarclub.fragments;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.common.Constants;
 import com.example.common.model.Participant;
 import com.example.common.model.Session;
 import com.example.quentincourvoisier.polarclub.R;
@@ -19,14 +28,22 @@ import com.example.quentincourvoisier.polarclub.activities.MainActivity;
 import com.example.quentincourvoisier.polarclub.adapters.ParticipantsAdapter;
 import com.example.quentincourvoisier.polarclub.eventListener.ParticipantEventListener;
 import com.example.quentincourvoisier.polarclub.helper.HelperDate;
+import com.example.quentincourvoisier.polarclub.task.TimerSessionTask;
 import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
 
 import static com.example.common.Constants.DB_PARTICIPANTS;
+import static com.example.common.Constants.DB_PARTICIPANTS;
+import static com.example.common.Constants.DB_PARTICIPANTS;
+import static com.example.common.Constants.DB_SESSIONS;
 import static com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter.ARG_SESSION;
 
 /**
@@ -52,6 +69,9 @@ public class UserInSessionFragment extends Fragment {
 
     private Session session;
     private List<Participant> participants;
+    private Timer timer;
+    private TimerSessionTask timerSessionTask;
+    private BroadcastReceiver br;
 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
@@ -86,6 +106,27 @@ public class UserInSessionFragment extends Fragment {
 
         if (getArguments() != null) {
             session = (Session) getArguments().getSerializable(ARG_SESSION);
+
+            timerSessionTask = new TimerSessionTask(getActivity());
+            timerSessionTask.setTimestamp(session.getDebut());
+
+            if (timer == null) {
+                timer = new Timer();
+                timer.scheduleAtFixedRate(timerSessionTask, 1000, 1000);
+            }
+
+            br = new BroadcastReceiver() {
+                @SuppressLint("LongLogTag")
+                @Override
+                public void onReceive(Context context, Intent intent) {
+                    boolean isFinish = intent.getBooleanExtra(Constants.TIME_SESSION_VALUE, false);
+                    Log.d(TAG, String.valueOf(isFinish));
+                    if (isFinish) {
+                        getActivity().unregisterReceiver(br);
+                        deleteSession(session);
+                    }
+                }
+            };
         }
     }
 
@@ -121,12 +162,22 @@ public class UserInSessionFragment extends Fragment {
     public void onResume() {
         super.onResume();
         attachChildListener();
+        getActivity().registerReceiver(br, new IntentFilter(Constants.TIME_SESSION_MESSAGE));
     }
 
+    @SuppressLint("LongLogTag")
     @Override
     public void onPause() {
         super.onPause();
+        timer.cancel();
+        timer = null;
         detachChildListener();
+
+        try {
+            getActivity().unregisterReceiver(br);
+        } catch (IllegalArgumentException e) {
+            Log.e(TAG, e.getMessage());
+        }
     }
 
     @Override
@@ -148,6 +199,39 @@ public class UserInSessionFragment extends Fragment {
             databaseReference.child(DB_PARTICIPANTS).removeEventListener(childEventListener);
             childEventListener = null;
         }
+    }
+
+    @SuppressLint("LongLogTag")
+    private void deleteSession(Session session) {
+        database.getReference(DB_SESSIONS).child(session.getUid()).removeValue((databaseError, databaseReference) -> {
+            if (databaseError == null) {
+                database.getReference(DB_PARTICIPANTS).orderByChild("uidSession").equalTo(session.getUid()).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (DataSnapshot appleSnapshot: dataSnapshot.getChildren()) {
+                            appleSnapshot.getRef().removeValue();
+                        }
+
+                        AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
+                        alert.setTitle("Fin de session");
+                        alert.setMessage("Bravo vous êtes arrivé au bout de la session. Elle est maintenant terminé");
+
+                        alert.setPositiveButton("Finir", (dialog, which) -> {
+                            ListSessionFragment fragment = new ListSessionFragment();
+                            FragmentManager manager = getFragmentManager();
+                            manager.beginTransaction().replace(R.id.content, fragment, "FragmentName").commit();
+                        });
+
+                        alert.show();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(TAG, String.valueOf(databaseError));
+                    }
+                });
+            }
+        });
     }
 
     /**

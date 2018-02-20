@@ -102,8 +102,7 @@ public class HeartRateFragment extends Fragment implements View.OnClickListener 
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         heartBeatIntent = new Intent(getActivity() , WearHearbeatEmulatorService.class);
         View rootView = inflater.inflate(R.layout.fragment_heart_rate, container, false);
         mTextView = (TextView) rootView.findViewById(R.id.tvheartrate);
