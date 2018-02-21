@@ -35,16 +35,25 @@ public class HelperDate {
     }
 
     public static long dateToTimestamp(String stringDate) {
+        Log.d("HELPER_DATE", stringDate);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
         long date = 0;
 
         try {
             Date parsedDate = dateFormat.parse(stringDate);
             Timestamp timestamp = new Timestamp(parsedDate.getTime());
-            date = timestamp.getTime() / 1000;
+            date = detecteMidi(stringDate, timestamp.getTime() / 1000);
         } catch (ParseException e) {
             Log.d("HelperDate", e.getMessage());
             e.printStackTrace();
+        }
+
+        return date;
+    }
+
+    private static long detecteMidi(String dateString, long date) {
+        if (dateString.split(" ")[1].split(":")[0].equals("12")) {
+            return date + 12 * 3600;
         }
 
         return date;

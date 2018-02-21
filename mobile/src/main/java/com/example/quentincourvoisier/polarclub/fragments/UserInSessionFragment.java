@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.example.common.model.Participant;
 import com.example.common.model.Session;
+import com.example.common.task.DebutSessionTask;
 import com.example.common.task.TimerSessionTask;
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.activities.MainActivity;
@@ -35,12 +36,16 @@ import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 
+import static android.view.View.*;
 import static com.example.common.Constants.DB_PARTICIPANTS;
 import static com.example.common.Constants.DB_SESSIONS;
+import static com.example.common.Constants.DEBUT_SESSION_MESSAGE;
+import static com.example.common.Constants.DEBUT_SESSION_VALUE;
 import static com.example.common.Constants.TIME_SESSION_MESSAGE;
 import static com.example.common.Constants.TIME_SESSION_VALUE;
 import static com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter.ARG_SESSION;
@@ -63,6 +68,7 @@ public class UserInSessionFragment extends Fragment {
     private TextView textViewUid;
     private TextView textViewProf;
     private TextView textViewHeure;
+    private TextView textViewDebut;
     private RecyclerView rv;
     private ParticipantsAdapter pa;
 
@@ -70,7 +76,9 @@ public class UserInSessionFragment extends Fragment {
     private List<Participant> participants;
     private Timer timer;
     private TimerSessionTask timerSessionTask;
-    private BroadcastReceiver br;
+    private DebutSessionTask debutSessionTask;
+    private BroadcastReceiver brForFinishSession;
+    private BroadcastReceiver brForDebutSession;
 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
@@ -109,20 +117,25 @@ public class UserInSessionFragment extends Fragment {
             timerSessionTask = new TimerSessionTask(getActivity());
             timerSessionTask.setTimestamp(session.getDebut());
 
+            debutSessionTask = new DebutSessionTask(getActivity());
+            debutSessionTask.setTimestamp(session.getDebut());
+
             if (timer == null) {
                 timer = new Timer();
                 timer.scheduleAtFixedRate(timerSessionTask, 1000, 1000);
+                timer.scheduleAtFixedRate(debutSessionTask, 1000, 1000);
             }
 
-            br = new BroadcastReceiver() {
+            brForFinishSession = new BroadcastReceiver() {
                 @SuppressLint("LongLogTag")
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    boolean isFinish = intent.getBooleanExtra(TIME_SESSION_VALUE, false);
-                    if (isFinish) {
-                        getActivity().unregisterReceiver(br);
-                        deleteSession(session);
-                    }
+                boolean isFinish = intent.getBooleanExtra(TIME_SESSION_VALUE, false);
+
+                if (isFinish) {
+                    getActivity().unregisterReceiver(brForFinishSession);
+                    deleteSession(session);
+                }
                 }
             };
         }
@@ -132,19 +145,39 @@ public class UserInSessionFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_user_in_session, container, false);
 
+        textViewUid = root.findViewById(R.id.userInSessionFrag_uid);
+        textViewProf = root.findViewById(R.id.userInSessionFrag_prof);
+        textViewHeure = root.findViewById(R.id.userInSessionFrag_heure);
+        textViewDebut = root.findViewById(R.id.userInSessionFrag_debut);
+
+        textViewUid.setText(session.getUid());
+        textViewProf.setText(session.getProf());
+        textViewHeure.setText(HelperDate.timestampToDateString(session.getDebut()));
+
+        textViewDebut.setVisibility(GONE);
+
+
         rv = root.findViewById(R.id.users_recycler_view);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         rv.setLayoutManager(manager);
         pa = new ParticipantsAdapter((MainActivity) getActivity(), participants, session.getUid());
         rv.setAdapter(pa);
 
-        textViewUid = root.findViewById(R.id.userInSessionFrag_uid);
-        textViewProf = root.findViewById(R.id.userInSessionFrag_prof);
-        textViewHeure = root.findViewById(R.id.userInSessionFrag_heure);
+        brForDebutSession = new BroadcastReceiver() {
+            @SuppressLint("LongLogTag")
+            @Override
+            public void onReceive(Context context, Intent intent) {
+            boolean isStart = intent.getBooleanExtra(DEBUT_SESSION_VALUE, false);
 
-        textViewUid.setText(session.getUid());
-        textViewProf.setText(session.getProf());
-        textViewHeure.setText(HelperDate.timestampToDateString(session.getDebut()));
+            if (isStart) {
+                getActivity().unregisterReceiver(brForDebutSession);
+            } else {
+                String text = "Début de la séance à : " + HelperDate.timestampToDateString(session.getDebut());
+                textViewDebut.setText(text);
+                textViewDebut.setVisibility(VISIBLE);
+            }
+            }
+        };
 
         return root;
     }
@@ -160,7 +193,8 @@ public class UserInSessionFragment extends Fragment {
     public void onResume() {
         super.onResume();
         attachChildListener();
-        getActivity().registerReceiver(br, new IntentFilter(TIME_SESSION_MESSAGE));
+        getActivity().registerReceiver(brForFinishSession, new IntentFilter(TIME_SESSION_MESSAGE));
+        getActivity().registerReceiver(brForDebutSession, new IntentFilter(DEBUT_SESSION_MESSAGE));
     }
 
     @SuppressLint("LongLogTag")
@@ -172,7 +206,8 @@ public class UserInSessionFragment extends Fragment {
         detachChildListener();
 
         try {
-            getActivity().unregisterReceiver(br);
+            getActivity().unregisterReceiver(brForFinishSession);
+            getActivity().unregisterReceiver(brForDebutSession);
         } catch (IllegalArgumentException e) {
             Log.e(TAG, e.getMessage());
         }

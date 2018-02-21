@@ -52,7 +52,8 @@ public class HeartRateFragment extends Fragment implements View.OnClickListener 
     private static final String BTN_LESS_HEART = "btn_less_heart";
 
     private Intent heartBeatIntent;
-    private BroadcastReceiver br;
+    private BroadcastReceiver brHeartbeat;
+    private BroadcastReceiver brFinishSession;
     private TimerSessionTask timerSessionTask;
     private Timer timer;
 
@@ -127,23 +128,27 @@ public class HeartRateFragment extends Fragment implements View.OnClickListener 
             timer.scheduleAtFixedRate(timerSessionTask, 1000, 1000);
         }
 
-        br = new BroadcastReceiver() {
+        brHeartbeat = new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
                 int hearbeats = intent.getIntExtra(HEART_COUNT_VALUE, 80);
                 mTextView.setText(String.valueOf(hearbeats));
                 database.getReference(DB_PARTICIPANTS).child(idParticipant).child("battements").setValue(hearbeats);
-                //SynchronizeAsyncTask mSynchronizeAsyncTask = new SynchronizeAsyncTask(getActivity());
-                //mSynchronizeAsyncTask.execute(new Integer(hearbeats));
+            }
+        };
 
+        brFinishSession = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
                 boolean isFinish = intent.getBooleanExtra(TIME_SESSION_VALUE, false);
                 Log.d("AZERTY", String.valueOf(isFinish));
                 if (isFinish) {
-                    getActivity().unregisterReceiver(br);
+                    getActivity().unregisterReceiver(brFinishSession);
                     finishSession();
                 }
             }
         };
+
         return rootView;
     }
 
@@ -159,8 +164,8 @@ public class HeartRateFragment extends Fragment implements View.OnClickListener 
     public void onResume() {
         super.onResume();
         getActivity().startService(heartBeatIntent);
-        getContext().registerReceiver(br, new IntentFilter(HEART_COUNT_MESSAGE));
-        getContext().registerReceiver(br, new IntentFilter(TIME_SESSION_MESSAGE));
+        getContext().registerReceiver(brHeartbeat, new IntentFilter(HEART_COUNT_MESSAGE));
+        getContext().registerReceiver(brFinishSession, new IntentFilter(TIME_SESSION_MESSAGE));
     }
 
 
@@ -168,9 +173,10 @@ public class HeartRateFragment extends Fragment implements View.OnClickListener 
     public void onPause() {
         super.onPause();
         getActivity().stopService(heartBeatIntent);
+        getActivity().unregisterReceiver(brHeartbeat);
 
         try {
-            getActivity().unregisterReceiver(br);
+            getActivity().unregisterReceiver(brFinishSession);
         } catch (IllegalArgumentException e) {
 
         }

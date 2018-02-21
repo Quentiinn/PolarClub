@@ -2,7 +2,6 @@ package com.example.common.task;
 
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 
 import com.example.common.Constants;
 
@@ -10,28 +9,28 @@ import java.sql.Timestamp;
 import java.util.TimerTask;
 
 /**
- * Created by antho on 20/02/2018.
+ * Created by antho on 21/02/2018.
  */
 
-public class TimerSessionTask extends TimerTask {
-
-    public static final String TIME_SESSION_MESSAGE = "time_session_message";
-    public static final String TIME_SESSION_VALUE = "time_session_value";
+public class DebutSessionTask extends TimerTask {
 
     private long timestamp;
     private Context context;
 
-    public TimerSessionTask(Context context) {
+    public DebutSessionTask(Context context) {
         this.context = context;
     }
+
+    public static final String DEBUT_SESSION_MESSAGE = "debut_session_message";
+    public static final String DEBUT_SESSION_VALUE = "debut_session_value";
 
     @Override
     public void run() {
         long timestampActual = new Timestamp(System.currentTimeMillis()).getTime();
 
         Intent intent = new Intent();
-        intent.setAction(Constants.TIME_SESSION_MESSAGE);
-        intent.putExtra(Constants.TIME_SESSION_VALUE, isFinish(timestampActual));
+        intent.setAction(Constants.DEBUT_SESSION_MESSAGE);
+        intent.putExtra(Constants.DEBUT_SESSION_VALUE, isStart(timestampActual));
         context.sendBroadcast(intent);
     }
 
@@ -39,7 +38,7 @@ public class TimerSessionTask extends TimerTask {
         this.timestamp = timestamp;
     }
 
-    private boolean isFinish(long actual) {
-        return actual > (timestamp * 1000 + 3600000);
+    private boolean isStart(long actual) {
+        return actual > (timestamp * 1000);
     }
 }
