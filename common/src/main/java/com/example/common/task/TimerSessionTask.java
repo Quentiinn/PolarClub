@@ -1,4 +1,4 @@
-package com.example.quentincourvoisier.polarclub.task;
+package com.example.common.task;
 
 import android.content.Context;
 import android.content.Intent;

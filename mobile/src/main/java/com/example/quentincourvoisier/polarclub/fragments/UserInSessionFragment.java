@@ -18,15 +18,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.common.Constants;
 import com.example.common.model.Participant;
 import com.example.common.model.Session;
+import com.example.common.task.TimerSessionTask;
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.activities.MainActivity;
 import com.example.quentincourvoisier.polarclub.adapters.ParticipantsAdapter;
 import com.example.quentincourvoisier.polarclub.eventListener.ParticipantEventListener;
 import com.example.quentincourvoisier.polarclub.helper.HelperDate;
-import com.example.quentincourvoisier.polarclub.task.TimerSessionTask;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -42,6 +41,8 @@ import java.util.Timer;
 
 import static com.example.common.Constants.DB_PARTICIPANTS;
 import static com.example.common.Constants.DB_SESSIONS;
+import static com.example.common.Constants.TIME_SESSION_MESSAGE;
+import static com.example.common.Constants.TIME_SESSION_VALUE;
 import static com.example.quentincourvoisier.polarclub.adapters.SessionsAdapter.ARG_SESSION;
 
 /**
@@ -117,7 +118,7 @@ public class UserInSessionFragment extends Fragment {
                 @SuppressLint("LongLogTag")
                 @Override
                 public void onReceive(Context context, Intent intent) {
-                    boolean isFinish = intent.getBooleanExtra(Constants.TIME_SESSION_VALUE, false);
+                    boolean isFinish = intent.getBooleanExtra(TIME_SESSION_VALUE, false);
                     if (isFinish) {
                         getActivity().unregisterReceiver(br);
                         deleteSession(session);
@@ -159,7 +160,7 @@ public class UserInSessionFragment extends Fragment {
     public void onResume() {
         super.onResume();
         attachChildListener();
-        getActivity().registerReceiver(br, new IntentFilter(Constants.TIME_SESSION_MESSAGE));
+        getActivity().registerReceiver(br, new IntentFilter(TIME_SESSION_MESSAGE));
     }
 
     @SuppressLint("LongLogTag")
@@ -231,7 +232,7 @@ public class UserInSessionFragment extends Fragment {
             public void onComplete(DatabaseError databaseError, boolean b, DataSnapshot dataSnapshot) {
                 AlertDialog.Builder alert = new AlertDialog.Builder(getActivity());
                 alert.setTitle("Fin de session");
-                alert.setMessage("Bravo vous êtes arrivé au bout de la session. Elle est maintenant terminé");
+                alert.setMessage("La session est terminé");
 
                 alert.setPositiveButton("Finir", (dialog, which) -> {
                     ListSessionFragment fragment = new ListSessionFragment();

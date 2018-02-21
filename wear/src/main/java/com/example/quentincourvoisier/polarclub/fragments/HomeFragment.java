@@ -5,13 +5,16 @@ import android.app.FragmentManager;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.common.model.Participant;
+import com.example.common.model.Session;
 import com.example.quentincourvoisier.polarclub.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,17 +34,11 @@ import static com.example.common.Constants.DB_SESSIONS;
  * create an instance of this fragment.
  */
 public class HomeFragment extends Fragment implements View.OnClickListener {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
+
+    public static final String ARG_SESSION = "arg_session";
+    public static final String ARG_ID_PARTICIPANT = "arg_id_participant";
 
     private static final String BTN_REJOINDRE = "btn_rejoindre";
-
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -69,8 +66,6 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
     public static HomeFragment newInstance(String param1, String param2) {
         HomeFragment fragment = new HomeFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,8 +78,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
         reference = database.getReference();
 
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
 
     }
@@ -137,7 +131,7 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
                 final String nomSession = session.getText().toString();
                 final String pseudoSession = pseudo.getText().toString();
 
-                database.getReference(DB_SESSIONS).orderByKey().equalTo(nomSession).addListenerForSingleValueEvent(new ValueEventListener() {
+                database.getReference(DB_SESSIONS).child(nomSession).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
@@ -148,12 +142,15 @@ public class HomeFragment extends Fragment implements View.OnClickListener {
 
                             database.getReference(DB_PARTICIPANTS).child(uid).setValue(participant);
 
-                            HeartRateFragment hr = new HeartRateFragment();
+                            HeartRateFragment hr = HeartRateFragment.newInstance(ARG_SESSION);
                             Bundle bundle = new Bundle();
-                            bundle.putString("idParticipant", uid);
+                            bundle.putString(ARG_ID_PARTICIPANT, uid);
+                            bundle.putSerializable(ARG_SESSION, dataSnapshot.getValue(Session.class));
                             hr.setArguments(bundle);
                             FragmentManager fragmentManager = getFragmentManager();
                             fragmentManager.beginTransaction().replace(R.id.content_frame, hr).commit();
+                        } else {
+                            Toast.makeText(getActivity(), "La session n'éxiste pas ou est terminé", Toast.LENGTH_SHORT).show();
                         }
                     }
 
