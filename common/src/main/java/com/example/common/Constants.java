@@ -20,4 +20,8 @@ public class Constants {
 
     public static final String PREF_POLAR = "pref_polar";
     public static final String PREF_USER = "pref_user";
+
+    public static final String TITLE_NAVIGATION_HOME = "Accueil";
+    public static final String TITLE_NAVIGATION_NEW_SESSION = "Nouvelle session";
+    public static final String TITLE_NAVIGATION_LIST_SESSIONS = "Liste des sessions";
 }

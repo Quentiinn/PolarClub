@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.BottomNavigationView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.common.Constants;
 import com.example.common.model.Participant;
 import com.example.common.model.Session;
 import com.example.common.task.DebutSessionTask;
@@ -69,6 +71,7 @@ public class UserInSessionFragment extends Fragment {
     private TextView textViewProf;
     private TextView textViewHeure;
     private TextView textViewDebut;
+    private BottomNavigationView bottomNavigationView;
     private RecyclerView rv;
     private ParticipantsAdapter pa;
 
@@ -143,12 +146,15 @@ public class UserInSessionFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        getActivity().setTitle(String.valueOf(session.getUid()));
+
         root = inflater.inflate(R.layout.fragment_user_in_session, container, false);
 
         textViewUid = root.findViewById(R.id.userInSessionFrag_uid);
         textViewProf = root.findViewById(R.id.userInSessionFrag_prof);
         textViewHeure = root.findViewById(R.id.userInSessionFrag_heure);
         textViewDebut = root.findViewById(R.id.userInSessionFrag_debut);
+        bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
 
         textViewUid.setText(session.getUid());
         textViewProf.setText(session.getProf());
@@ -270,6 +276,9 @@ public class UserInSessionFragment extends Fragment {
                 alert.setMessage("La session est terminé");
 
                 alert.setPositiveButton("Finir", (dialog, which) -> {
+                    getActivity().setTitle(Constants.TITLE_NAVIGATION_LIST_SESSIONS);
+                    bottomNavigationView.setSelectedItemId(R.id.navigation_list_session);
+
                     ListSessionFragment fragment = new ListSessionFragment();
                     FragmentManager manager = getFragmentManager();
                     manager.beginTransaction().replace(R.id.content, fragment, "FragmentName").commit();

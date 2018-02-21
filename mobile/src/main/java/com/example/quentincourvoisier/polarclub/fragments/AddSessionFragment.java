@@ -1,11 +1,13 @@
 package com.example.quentincourvoisier.polarclub.fragments;
 
 import android.app.DatePickerDialog;
+import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Fragment;
+import android.support.design.widget.BottomNavigationView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.common.Constants;
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.helper.HelperDate;
 import com.example.common.model.Session;
@@ -49,6 +52,7 @@ public class AddSessionFragment extends Fragment implements View.OnClickListener
     private EditText fieldSessionDate;
     private EditText fieldSessionHeure;
     private Button buttonCreateSession = null;
+    private BottomNavigationView bottomNavigationView;
 
     private FirebaseDatabase database;
     private DatabaseReference databaseReference;
@@ -88,6 +92,7 @@ public class AddSessionFragment extends Fragment implements View.OnClickListener
         fieldSessionDate = root.findViewById(R.id.addSessionFrag_date);
         fieldSessionHeure = root.findViewById(R.id.addSessionFrag_heure);
         buttonCreateSession = root.findViewById(R.id.addSessionFrag_btn);
+        bottomNavigationView = getActivity().findViewById(R.id.bottomNavigationView);
 
         fieldSessionDate.setOnClickListener(this);
         fieldSessionDate.setTag(FIELD_DATE_CREATE_SESSION);
@@ -185,6 +190,13 @@ public class AddSessionFragment extends Fragment implements View.OnClickListener
                 Toast.makeText(getActivity(), "Il y a eu un probleme lors de la création de la session", Toast.LENGTH_SHORT).show();
             } else {
                 Toast.makeText(getActivity(), "La session est bien crée", Toast.LENGTH_SHORT).show();
+
+                getActivity().setTitle(Constants.TITLE_NAVIGATION_LIST_SESSIONS);
+                bottomNavigationView.setSelectedItemId(R.id.navigation_list_session);
+
+                ListSessionFragment fragment = new ListSessionFragment();
+                FragmentManager manager = getFragmentManager();
+                manager.beginTransaction().replace(R.id.content, fragment, "FragmentName").commit();
             }
         });
     }

@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.common.Constants;
 import com.example.quentincourvoisier.polarclub.R;
 import com.example.quentincourvoisier.polarclub.fragments.AddSessionFragment;
 import com.example.quentincourvoisier.polarclub.fragments.HomeFragment;
@@ -20,6 +21,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import static com.example.common.Constants.*;
 import static com.example.common.Constants.PREF_POLAR;
 import static com.example.common.Constants.PREF_USER;
 
@@ -39,19 +41,19 @@ public class MainActivity extends AppCompatActivity {
         public boolean onNavigationItemSelected(@NonNull MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.navigation_home:
-                    setTitle("Home");
+                    setTitle(TITLE_NAVIGATION_HOME);
                     HomeFragment homeFragment = new HomeFragment();
                     FragmentTransaction homeFragmentTransaction = getFragmentManager().beginTransaction();
                     homeFragmentTransaction.replace(R.id.content, homeFragment, "FragmentName").commit();
                     return true;
                 case R.id.navigation_new_session:
-                    setTitle("New session");
+                    setTitle(TITLE_NAVIGATION_NEW_SESSION);
                     AddSessionFragment sessionFragment = new AddSessionFragment();
                     FragmentTransaction addSessionFragmentTransaction = getFragmentManager().beginTransaction();
                     addSessionFragmentTransaction.replace(R.id.content, sessionFragment, "FragmentName").commit();
                     return true;
                 case R.id.navigation_list_session:
-                    setTitle("List Sessions");
+                    setTitle(TITLE_NAVIGATION_LIST_SESSIONS);
                     ListSessionFragment listSessionFragment = new ListSessionFragment();
                     FragmentTransaction listSessionFragmentTransaction = getFragmentManager().beginTransaction();
                     listSessionFragmentTransaction.replace(R.id.content, listSessionFragment, "FragmentName").commit();
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        BottomNavigationView navigation = findViewById(R.id.navigation);
+        BottomNavigationView navigation = findViewById(R.id.bottomNavigationView);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         auth = FirebaseAuth.getInstance();
@@ -75,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = getSharedPreferences(PREF_POLAR, MODE_PRIVATE);
 
-        setTitle("Home");
+        setTitle(Constants.TITLE_NAVIGATION_HOME);
         HomeFragment homeFragment = new HomeFragment();
         FragmentTransaction homeFragmentTransaction = getFragmentManager().beginTransaction();
         homeFragmentTransaction.replace(R.id.content, homeFragment, "FragmentName").commit();
