@@ -26,7 +26,7 @@ tools:deviceIds="wear">
         android:layout_width="43dp"
         android:layout_height="27dp"
         android:layout_gravity="center"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="40dp"
         android:layout_weight="1"
         android:hint="100"
         android:textAlignment="center"
@@ -42,29 +42,22 @@ tools:deviceIds="wear">
         android:id="@+id/increaseButton"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:layout_marginStart="25dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="8dp"
         android:background="@drawable/ic_add_white_24dp"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/heartbeat" />
 
 
     <Button
         android:id="@+id/decreaseButton"
-        android:layout_width="50dp"
+        android:layout_width="47dp"
         android:layout_height="50dp"
         android:layout_alignBottom="@id/increaseButton"
-        android:layout_marginEnd="25dp"
-        android:layout_marginTop="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="8dp"
         android:layout_toRightOf="@id/increaseButton"
         android:background="@drawable/ic_remove_black_24dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/heartbeat" /><![CDATA[>
-
-
-
-
-
-
-]]>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/heartbeat" />
 </android.support.constraint.ConstraintLayout>
